@@ -1,6 +1,4 @@
-  //THIS IS A COMMENT TEST TO SEE IF GIT WORKS
-  //THIS IS ANOTHER AWESOME TesT
-  
+
   #include <SPI.h>
   #include <SD.h >  // These two are for the SD card 
 
