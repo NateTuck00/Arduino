@@ -7,7 +7,7 @@ Both of my main projects run a real time control system. Not all code in this li
 
 
 Projects included:
-  -Using an arduino Uno to control a linear actuator testing clutches with a pressure sensor, h bridge drive for the 12V motor, based on button input on an LCD shield and      exporting the data to an SD card
+  -Using an arduino Uno to control a linear actuator testing clutches with a pressure sensor, h bridge drive for the 12V motor, button input on an LCD shield, and exporting the data to an SD card
   
   -Using an arduino Leonardo with a PID and clamping techniques to monitor and control cabin air temp in an S10 with PWM control on a Chevy Cruze heating core.
 
