@@ -29,7 +29,8 @@ uint8_t tests_needed = 0;
 uint8_t newdisp_needed = 0;
 uint8_t button_flag = 0;
 uint8_t manual_control_needed = 0;
-uint8_t disaster=0; 
+uint8_t disaster = 0; 
+uint8_t manual_motor_on = 0;
 
 uint8_t button_code = 0;
 uint8_t itr = 0;
@@ -411,6 +412,17 @@ uint8_t cons_selects = 0;
 ISR(TIMER1_COMPA_vect) {
   //Serial.println("ISR ");
   //read_button();//Sets the button_code variable
+
+  /*
+    if(manual_motor_on == 1){
+      // can add an && above with specific iterator to adjust the length of manual control. Want to test with pressure sensor on 5v to see where to call disaster as well as to test length of pull (although only 2" variance)  
+      //turn off. Don't clear disaster code yet and just wait for more button presses to see. Can also add an iterator in the ISR to see how long the disaster button has been held
+      // 
+
+
+    }//endif motor manually turned on
+   
+   */
 
   if (button_code == 1) {
     cons_ups++;
