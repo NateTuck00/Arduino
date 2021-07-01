@@ -49,7 +49,7 @@ void setup() {
   TCCR1B = 0;                               // same for TCCR1B
   TCNT1  = 0;                               //initialize counter value to 0
 
-  OCR1A = 20000;                             // = (16*10^6) / (hz*prescaler) - 1 (must be <65536)    6249= 25ms
+  OCR1A = 6249;                             // = (16*10^6) / (hz*prescaler) - 1 (must be <65536)    6249= 25ms
   TCCR1B |= (1 << WGM12);                   // turn on CTC mode
   TCCR1B |= (1 << CS11) | (1 << CS10);      // Set CS11 and 10 for 64 prescaler
   TIMSK1 |= (1 << OCIE1A);                  // enable timer compare interrupt
@@ -385,7 +385,7 @@ ISR(TIMER1_COMPA_vect) {
     cons_rights = 0;
     cons_selects = 0;
 
-    if (cons_ups > 4) {
+    if (cons_ups > 8) {
       Serial.println("Held up long enough");
       cons_ups = 0;
       button_flag = 1;
@@ -401,7 +401,7 @@ ISR(TIMER1_COMPA_vect) {
     cons_rights = 0;
     cons_selects = 0;
 
-    if (cons_downs > 4) {
+    if (cons_downs > 8) {
       Serial.println("Held down long enough");
       cons_downs = 0;
       button_flag = 1;
@@ -417,7 +417,7 @@ ISR(TIMER1_COMPA_vect) {
     cons_rights = 0;
     cons_selects = 0;
 
-    if (cons_lefts > 4) {
+    if (cons_lefts > 8) {
       Serial.println("Held left long enough");
       cons_lefts = 0;
       button_flag = 1;
@@ -433,7 +433,7 @@ ISR(TIMER1_COMPA_vect) {
     cons_lefts = 0;
     cons_selects = 0;
 
-    if (cons_rights > 4) {
+    if (cons_rights > 8) {
       Serial.println("Held right long enough");
       cons_rights = 0;
       button_flag = 1;
@@ -449,7 +449,7 @@ ISR(TIMER1_COMPA_vect) {
     cons_lefts = 0;
     cons_rights = 0;
 
-    if (cons_selects > 4) {
+    if (cons_selects > 8) {
       Serial.println("Held select long enough");
       cons_selects = 0;
       button_flag = 1;
