@@ -29,7 +29,7 @@ uint8_t tests_needed = 0;
 uint8_t newdisp_needed = 0;
 uint8_t button_flag = 0;
 uint8_t manual_control_needed = 0;
-
+uint8_t disaster=0; 
 
 uint8_t button_code = 0;
 uint8_t itr = 0;
@@ -301,42 +301,77 @@ void displayLCD() {
 
 void handle_button(uint8_t button_handler) {
   Serial.println("Handle button called");
-  if (button_handler == 1) {
+  // Add control here for manual control of the actuator. Could be a set time or could be checked for at the start of the interrupt each time and a flag set to tell the ISR that the motor is on
+  /*
+    if(disaster==1){
+      if(button_handler==1){
+        
+      }//endif UP
+
+      if(button_handler==2){
+
+      }//endif DOWN
+
+      if(button_handler==3){
+        //retract motor and set motor on flag to be checked by ISR
+      }//endif LEFT
+
+      if(button_handler==4){
+        //extend motor and set flag to be checked by ISR. Careful with this. 
+        
+      }//endif RIGHT
+
+      if(button_handler==5){
+
+      }//endif SELECT
+
+
+    }//endif disaster
+  */  
+  
+  if ((button_handler == 1)&&(disaster==0)) {
+  
     if ((screen == 0) || (screen == 1)) {
       tests = tests + 5;
     }//endnestedif
     if ((screen == 3) || (screen == 4)) {
       tests = tests + 100;
     }//endnestedif
+    
     newdisp_needed = 1;
   }//end UP
 
-  if (button_handler == 2) {
+  if ((button_handler == 2)&&(disaster==0)) {
+    
     if ((screen == 0) || (screen == 1)) {
       if (tests > 5) {
         tests = tests - 5;
       }//enddoublynestedif
     }//endnestedif
+    
     if ((screen == 3) || (screen == 4)) {
       if (tests > 100) {
         tests = tests - 100;
       }//enddoublynestedif
     }//endnestedif
+    
     newdisp_needed = 1;
   }//end DOWN
 
-  if (button_handler == 3) {
+  if ((button_handler == 3)&&(disaster==0)) {
+    
     if (screen > 0) {
       screen--;
     }//endnestedif
+    
     newdisp_needed = 1;
   }//end LEFT
 
-  if (button_handler == 4) {
+  if ((button_handler == 4)&&(disaster==0)) {
+    
     if (screen < 4) { // 01 , 2main menu, 34
       screen++;
     }//endnestedif
-
     if (screen == 5) {
       if (tests > 0) {
         tests_needed = 1;
@@ -346,14 +381,14 @@ void handle_button(uint8_t button_handler) {
     newdisp_needed = 1;
   }//end RIGHT
 
-  if (button_handler == 5) {
+  if ((button_handler == 5)&&(disaster==0)) {
 
     //This is a recently added checker used to try and pause while running.
     if (tests_needed == 1) {
       screen = 5; // This is a special pause screen.
       tests_needed = 0;
     }//endif select while running
-
+    
     if ((screen == 0) || (screen == 4)) {
       tests_needed = 1;
       // may need to use own seperate display function for running
