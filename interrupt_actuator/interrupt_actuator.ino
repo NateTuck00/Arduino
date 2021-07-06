@@ -39,9 +39,53 @@ uint8_t button_holder = 0;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
+  while(!Serial){
+      ;
+  }//endwhile
+  
 
   lcd.begin(16, 2);
   lcd.setBacklight(VIOLET);
+
+  if (!SD.begin(9)) {
+    Serial.println("Initialization failed!"); 
+    lcd.clear();
+    lcd.print("Initialization failed");
+    lcd.setBacklight(RED);
+    while (1);
+  }//endif
+  Serial.println ("Initialization done.");
+  
+  myFile = SD.open ("test.txt", FILE_WRITE);//Open the file. Note that you can only open one file at a time. You must close this one before opening the next. 
+
+
+  if(myFile){//if the file has opened correctly
+    Serial.println("Writing to test.txt...");
+    myFile.println("testing 1, 2, 3.");         // This writes into the actual file
+    myFile.close();
+    Serial.println("Done writing to file.");
+  }//endif. 
+  
+  else{ 
+    Serial.println("Error opening test.txt");
+  }//endelse
+
+  myFile = SD.open("test.txt");
+  
+  if(myFile){
+      Serial.println("test.txt:");
+
+      while (myFile.available()){
+        Serial.write(myFile.read());          // Read out the file
+      }//endwhile more left in file to read
+      
+      myFile.close();
+  }//end if file opens correctly
+  else{
+    Serial.println("Error opening test.txt");
+    lcd.setBacklight(RED); 
+  }//endelse file failed to open.
+
 
   ///////////////////////////////////////////
   //Timer Section. Editing is very dangerous.
@@ -101,6 +145,12 @@ void loop() {
     if (buttons & BUTTON_SELECT) {
       //Serial.println("Select in loop");
       button_code = 5;
+    
+      if(tests_needed==1){
+        screen=5;
+        tests_needed=0;
+      }//end pause
+        
     }//end up
   }//endif buttons
 
@@ -390,13 +440,13 @@ void handle_button(uint8_t button_handler) {
   }//end RIGHT
 
   if ((button_handler == 5)&&(disaster==0)) {
-
+    /*
     //This is a recently added checker used to try and pause while running.
     if (tests_needed == 1) {
       screen = 5; // This is a special pause screen.
       tests_needed = 0;
     }//endif select while running
-    
+    */
     if ((screen == 0) || (screen == 4)) {
       tests_needed = 1;
       // may need to use own seperate display function for running
