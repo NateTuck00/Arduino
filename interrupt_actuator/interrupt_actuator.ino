@@ -20,8 +20,6 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();// This should connect to an
 
 uint16_t tests = 1; // if on right screen up by 100 start on 100. left=1 go up by 5
 uint8_t screen = 2; // Use left and right as iterator for screen if not running
-uint8_t g_last_button = 1; //I'll use this to check inputs with select
-uint8_t g_button_before_last = 1;
 uint8_t pressure;
 
 
@@ -34,7 +32,6 @@ uint8_t manual_motor_on = 0;
 
 uint8_t button_code = 0;
 uint8_t itr = 0;
-uint8_t button_holder = 0;
 
 void setup() {
   // put your setup code here, to run once:
