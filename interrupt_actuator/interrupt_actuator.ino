@@ -66,6 +66,13 @@ void loop() {
   // put your main code here, to run repeatedly:
   uint8_t buttons = lcd.readButtons();
 
+  /*
+   * Loop needs to have the coding for what qualifies a disaster. We need to measure the pressure within runTest() itself.
+   * If pressure is OOB or dropping off, timeout for the travel of the actuator, switch turned off, or current is too high disaster=1; 
+   * Can also check this within the ISR itself if slows down our loop too much. 
+   */
+
+
   //Serial.println("read_button called");
   if (buttons) {
     //Serial.println("if buttons");
@@ -306,11 +313,11 @@ void handle_button(uint8_t button_handler) {
   /*
     if(disaster==1){
       if(button_handler==1){
-        
+        //ignore the up case? 
       }//endif UP
 
       if(button_handler==2){
-
+         //ignore downs??
       }//endif DOWN
 
       if(button_handler==3){
@@ -323,7 +330,7 @@ void handle_button(uint8_t button_handler) {
       }//endif RIGHT
 
       if(button_handler==5){
-
+         //if select is pressed after an emergency, shut off? 
       }//endif SELECT
 
 
@@ -417,8 +424,10 @@ ISR(TIMER1_COMPA_vect) {
     if(manual_motor_on == 1){
       // can add an && above with specific iterator to adjust the length of manual control. Want to test with pressure sensor on 5v to see where to call disaster as well as to test length of pull (although only 2" variance)  
       //turn off. Don't clear disaster code yet and just wait for more button presses to see. Can also add an iterator in the ISR to see how long the disaster button has been held
-      // 
+      // pin d1 and d2 connected to this.
 
+      
+    
 
     }//endif motor manually turned on
    
