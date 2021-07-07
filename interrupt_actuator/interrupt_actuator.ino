@@ -20,15 +20,10 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();// This should connect to an
 
 uint16_t tests = 1; // if on right screen up by 100 start on 100. left=1 go up by 5
 uint8_t screen = 2; // Use left and right as iterator for screen if not running
-uint8_t pressure;
+//uint8_t pressure;//eventually if can't return it as function or flag high or low
 
-
-uint8_t tests_needed = 0;
-uint8_t newdisp_needed = 0;
-uint8_t button_flag = 0;
-uint8_t manual_control_needed = 0;
-uint8_t disaster = 0; 
-uint8_t manual_motor_on = 0;
+uint8_t flags = 0; // flags |= B00000000
+uint8_t flags_holder = 0;
 
 uint8_t button_code = 0;
 uint8_t itr = 0;
@@ -36,51 +31,51 @@ uint8_t itr = 0;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  while(!Serial){
-      ;
+  while (!Serial) {
+    ;
   }//endwhile
-  
+
 
   lcd.begin(16, 2);
   lcd.setBacklight(VIOLET);
 
   if (!SD.begin(9)) {
-    Serial.println("Initialization failed!"); 
+    Serial.println("Initialization failed!");
     lcd.clear();
     lcd.print("Initialization failed");
     lcd.setBacklight(RED);
     while (1);
   }//endif
   Serial.println ("Initialization done.");
-  
-  myFile = SD.open ("test.txt", FILE_WRITE);//Open the file. Note that you can only open one file at a time. You must close this one before opening the next. 
+
+  myFile = SD.open ("test.txt", FILE_WRITE);//Open the file. Note that you can only open one file at a time. You must close this one before opening the next.
 
 
-  if(myFile){//if the file has opened correctly
+  if (myFile) { //if the file has opened correctly
     Serial.println("Writing to test.txt...");
     myFile.println("testing 1, 2, 3.");         // This writes into the actual file
     myFile.close();
     Serial.println("Done writing to file.");
-  }//endif. 
-  
-  else{ 
+  }//endif.
+
+  else {
     Serial.println("Error opening test.txt");
   }//endelse
 
   myFile = SD.open("test.txt");
-  
-  if(myFile){
-      Serial.println("test.txt:");
 
-      while (myFile.available()){
-        Serial.write(myFile.read());          // Read out the file
-      }//endwhile more left in file to read
-      
-      myFile.close();
+  if (myFile) {
+    Serial.println("test.txt:");
+
+    while (myFile.available()) {
+      Serial.write(myFile.read());          // Read out the file
+    }//endwhile more left in file to read
+
+    myFile.close();
   }//end if file opens correctly
-  else{
+  else {
     Serial.println("Error opening test.txt");
-    lcd.setBacklight(RED); 
+    lcd.setBacklight(RED);
   }//endelse file failed to open.
 
 
@@ -108,10 +103,10 @@ void loop() {
   uint8_t buttons = lcd.readButtons();
 
   /*
-   * Loop needs to have the coding for what qualifies a disaster. We need to measure the pressure within runTest() itself.
-   * If pressure is OOB or dropping off, timeout for the travel of the actuator, switch turned off, or current is too high disaster=1; 
-   * Can also check this within the ISR itself if slows down our loop too much. 
-   */
+     Loop needs to have the coding for what qualifies a disaster. We need to measure the pressure within runTest() itself.
+     If pressure is OOB or dropping off, timeout for the travel of the actuator, switch turned off, or current is too high disaster=1;
+     Can also check this within the ISR itself if slows down our loop too much.
+  */
 
 
   //Serial.println("read_button called");
@@ -142,12 +137,16 @@ void loop() {
     if (buttons & BUTTON_SELECT) {
       //Serial.println("Select in loop");
       button_code = 5;
-    
-      if(tests_needed==1){
-        screen=5;
-        tests_needed=0;
+
+      flags_holder=0;
+      flags_holder= (flags >> (1-1));
+      if ((flags_holder & 1) ==1) {                                                                                         
+      //if tests_needed=1;
+        screen = 5;
+        //tests_needed = 0;                                                                                               
+        flags &= B11111110;
       }//end pause
-        
+
     }//end up
   }//endif buttons
 
@@ -158,27 +157,41 @@ void loop() {
 
   switch (itr) {
     case 1:
-      if (button_flag == 1) {
+      flags_holder=0;
+      flags_holder= (flags >> (3-1));
+      if ((flags_holder & 1) ==1) {                                                                                            
+        //if button_flag==1
         handle_button(button_code);  // functions reset their flags at the end
 
       }//endif
       break;
 
     case 2:
-      if (newdisp_needed == 1) {
+
+      flags_holder=0;
+      flags_holder= (flags >> (2-1));
+      if ((flags_holder & 1)==1) {                                                                                                    
+        //if newdisp_needed==1
         Serial.println("If newdisp needed =1");
         displayLCD();
       }//endif
       break;
 
     case 3:
-      if (tests_needed == 1) {
+
+      flags_holder=0;
+      flags_holder= (flags >> (1-1));
+      if ((flags_holder & 1)==1) {                                                                                                      
+        //if tests_needed==1
         runTest();
       }//endif
       break;
 
     case 4:
-      if (manual_control_needed) {
+      flags_holder=0;
+      flags_holder= (flags >> (4-1));
+      if ((flags_holder & 1) ==1) {                                                                                                    
+         //manual_control_needed
         // don't reset this flag. new display and controls.
       }//endif
       break;
@@ -190,48 +203,6 @@ void loop() {
 
 }//end void loop();
 
-/*
-  void read_button(){
-  buttons = lcd.readButtons();
-
-  if(buttons){
-    //Serial.println("if buttons");
-
-    if (buttons & BUTTON_UP){
-      Serial.println("Up in loop");
-      button_code=1;
-    }//end up
-
-
-    if (buttons & BUTTON_DOWN){
-      //Serial.println("Down in loop");
-      button_code=2;
-    }//end up
-
-    if (buttons & BUTTON_LEFT){
-      //Serial.println("Left in loop");
-      button_code=3;
-    }//end up
-
-    if (buttons & BUTTON_RIGHT){
-      //Serial.println("Right in loop");
-      button_code=4;
-    }//end up
-
-    if (buttons & BUTTON_SELECT){
-      //Serial.println("Select in loop");
-      button_code=5;
-    }//end up
-
-  }//endif buttons
-
-  if(!buttons){
-    button_code=0;
-    //Serial.println("No buttons");
-  }//endif !buttons
-
-  }// end read_button()
-*/
 
 void runTest() {
   // Display running menu. Select to pause. Right to run after select. Select again to stop. (menu)
@@ -259,9 +230,11 @@ void runTest() {
 
   if (tests < 1) {
     tests = 1;
-    tests_needed = 0;
+    //tests_needed = 0;                                                                                                                                                                      
+    flags &= B11111110;
     screen = 2;
-    newdisp_needed = 1;
+    //newdisp_needed = 1;                                                                                                                                                                    
+    flags |= B00000010;
   }//endif
 
 
@@ -349,8 +322,8 @@ void displayLCD() {
     }//endfor
   }//endif pausescreen
 
-  newdisp_needed = 0;
-
+  //newdisp_needed = 0;                                                                                                                                   
+  flags &= B11111101;
 }//end displayLCD(screen#)
 
 
@@ -360,7 +333,7 @@ void handle_button(uint8_t button_handler) {
   /*
     if(disaster==1){
       if(button_handler==1){
-        //ignore the up case? 
+        //ignore the up case?
       }//endif UP
 
       if(button_handler==2){
@@ -372,88 +345,97 @@ void handle_button(uint8_t button_handler) {
       }//endif LEFT
 
       if(button_handler==4){
-        //extend motor and set flag to be checked by ISR. Careful with this. 
-        
+        //extend motor and set flag to be checked by ISR. Careful with this.
+
       }//endif RIGHT
 
       if(button_handler==5){
-         //if select is pressed after an emergency, shut off? 
+         //if select is pressed after an emergency, shut off?
       }//endif SELECT
 
 
     }//endif disaster
-  */  
-  
-  if ((button_handler == 1)&&(disaster==0)) {
-  
+  */
+  flags_holder=0;
+  flags_holder= (flags >>(5-1));
+  if ((button_handler == 1) && ((flags_holder &1)==0 )) {                                                                                                               
+
     if ((screen == 0) || (screen == 1)) {
       tests = tests + 5;
     }//endnestedif
     if ((screen == 3) || (screen == 4)) {
       tests = tests + 100;
     }//endnestedif
-    
-    newdisp_needed = 1;
+
+    //newdisp_needed = 1;                                                                                                                                     
+    flags |= B00000010;
   }//end UP
 
-  if ((button_handler == 2)&&(disaster==0)) {
-    
+  if ((button_handler == 2) && ((flags_holder & 1)==0) ){                                                                                                           
+
     if ((screen == 0) || (screen == 1)) {
       if (tests > 5) {
         tests = tests - 5;
       }//enddoublynestedif
     }//endnestedif
-    
+
     if ((screen == 3) || (screen == 4)) {
       if (tests > 100) {
         tests = tests - 100;
       }//enddoublynestedif
     }//endnestedif
-    
-    newdisp_needed = 1;
+
+    //newdisp_needed = 1;                                                                                                                                     
+    flags |= B00000010; 
   }//end DOWN
 
-  if ((button_handler == 3)&&(disaster==0)) {
-    
+  if ((button_handler == 3) && ((flags_holder & 1)==0))   {                                                                                                         
+
     if (screen > 0) {
       screen--;
     }//endnestedif
-    
-    newdisp_needed = 1;
+
+    //newdisp_needed = 1;                                                                                                                                     
+    flags |= B00000010;
   }//end LEFT
 
-  if ((button_handler == 4)&&(disaster==0)) {
-    
+  if ((button_handler == 4) && ((flags_holder & 1)==0)) {                                                                                                       
+
     if (screen < 4) { // 01 , 2main menu, 34
       screen++;
     }//endnestedif
     if (screen == 5) {
       if (tests > 0) {
-        tests_needed = 1;
+        //tests_needed = 1;                                                                                                                                
+        flags |= B00000001;
       }//endnestedif
     }//endif unpause
 
-    newdisp_needed = 1;
+    //newdisp_needed = 1;                                                                                                                                     
+    flags |= B00000010;
   }//end RIGHT
 
-  if ((button_handler == 5)&&(disaster==0)) {
+  if ((button_handler == 5) && ((flags_holder & 1)==0)) {                                                                                                    
     /*
-    //This is a recently added checker used to try and pause while running.
-    if (tests_needed == 1) {
+      //This is a recently added checker used to try and pause while running.
+      if (tests_needed == 1) {
       screen = 5; // This is a special pause screen.
       tests_needed = 0;
-    }//endif select while running
+      }//endif select while running
     */
     if ((screen == 0) || (screen == 4)) {
-      tests_needed = 1;
+      //tests_needed = 1;                                                                                                                                     
+      flags |= B00000001;
       // may need to use own seperate display function for running
 
     }//endnestedif
-    newdisp_needed = 1;
+    //newdisp_needed = 1;                                                                                                                                       
+    flags |= B00000010;
   }//end SELECT
 
 
-  button_flag = 0;
+  //button_flag = 0;                                                                                                                                           
+  flags &= B11111011;
 }//end handle_button()
 
 
@@ -469,16 +451,16 @@ ISR(TIMER1_COMPA_vect) {
 
   /*
     if(manual_motor_on == 1){
-      // can add an && above with specific iterator to adjust the length of manual control. Want to test with pressure sensor on 5v to see where to call disaster as well as to test length of pull (although only 2" variance)  
+      // can add an && above with specific iterator to adjust the length of manual control. Want to test with pressure sensor on 5v to see where to call disaster as well as to test length of pull (although only 2" variance)
       //turn off. Don't clear disaster code yet and just wait for more button presses to see. Can also add an iterator in the ISR to see how long the disaster button has been held
       // pin d1 and d2 connected to this.
 
-      
-    
+
+
 
     }//endif motor manually turned on
-   
-   */
+
+  */
 
   if (button_code == 1) {
     cons_ups++;
@@ -491,7 +473,8 @@ ISR(TIMER1_COMPA_vect) {
     if (cons_ups > 8) {
       Serial.println("Held up long enough");
       cons_ups = 0;
-      button_flag = 1;
+      //button_flag = 1;                                                                                                                        ///3
+      flags   |= B00000100;
 
     }//end consecutive ups case
   }//end UP code
@@ -507,7 +490,8 @@ ISR(TIMER1_COMPA_vect) {
     if (cons_downs > 8) {
       Serial.println("Held down long enough");
       cons_downs = 0;
-      button_flag = 1;
+      //button_flag = 1;                                                                                                                          //3
+      flags |= B00000100;
 
     }//end consecutive downs case
   }//end DOWN code
@@ -523,7 +507,8 @@ ISR(TIMER1_COMPA_vect) {
     if (cons_lefts > 8) {
       Serial.println("Held left long enough");
       cons_lefts = 0;
-      button_flag = 1;
+      //button_flag = 1;                                                                                                                              ///3
+      flags |= B00000100;
 
     }//end consecutive lefts case
   }//end LEFT code
@@ -539,8 +524,9 @@ ISR(TIMER1_COMPA_vect) {
     if (cons_rights > 8) {
       Serial.println("Held right long enough");
       cons_rights = 0;
-      button_flag = 1;
-
+      //button_flag = 1;                                                                                                                              ///3
+      flags |= B00000100;
+      
     }//end consecutive rights case
   }//end RIGHT code
 
@@ -555,8 +541,8 @@ ISR(TIMER1_COMPA_vect) {
     if (cons_selects > 8) {
       Serial.println("Held select long enough");
       cons_selects = 0;
-      button_flag = 1;
-
+      //button_flag = 1;                                                                                                                              ///3
+      flags |= B00000100; 
     }//end consecutive selects case
   }//end UP code
 
