@@ -140,7 +140,7 @@ void loop() {
 
       flags_holder=0;
       flags_holder= (flags >> (1-1));
-      if ((flags_holder & 1) ==1) {                                                                                         
+      if ((flags_holder & 1) == 1) {                                                                                         
       //if tests_needed=1;
         screen = 5;
         //tests_needed = 0;                                                                                               
@@ -157,9 +157,9 @@ void loop() {
 
   switch (itr) {
     case 1:
-      flags_holder=0;
-      flags_holder= (flags >> (3-1));
-      if ((flags_holder & 1) ==1) {                                                                                            
+      flags_holder = 0;
+      flags_holder = (flags >> (3-1));
+      if ((flags_holder & 1) == 1) {                                                                                            
         //if button_flag==1
         handle_button(button_code);  // functions reset their flags at the end
 
@@ -168,9 +168,9 @@ void loop() {
 
     case 2:
 
-      flags_holder=0;
+      flags_holder = 0;
       flags_holder= (flags >> (2-1));
-      if ((flags_holder & 1)==1) {                                                                                                    
+      if ((flags_holder & 1)== 1) {                                                                                                    
         //if newdisp_needed==1
         Serial.println("If newdisp needed =1");
         displayLCD();
@@ -179,18 +179,18 @@ void loop() {
 
     case 3:
 
-      flags_holder=0;
+      flags_holder = 0;
       flags_holder= (flags >> (1-1));
-      if ((flags_holder & 1)==1) {                                                                                                      
+      if ((flags_holder & 1)== 1) {                                                                                                      
         //if tests_needed==1
         runTest();
       }//endif
       break;
 
     case 4:
-      flags_holder=0;
+      flags_holder = 0;
       flags_holder= (flags >> (4-1));
-      if ((flags_holder & 1) ==1) {                                                                                                    
+      if ((flags_holder & 1) == 1) {                                                                                                    
          //manual_control_needed
         // don't reset this flag. new display and controls.
       }//endif
@@ -356,9 +356,9 @@ void handle_button(uint8_t button_handler) {
 
     }//endif disaster
   */
-  flags_holder=0;
-  flags_holder= (flags >>(5-1));
-  if ((button_handler == 1) && ((flags_holder &1)==0 )) {                                                                                                               
+  flags_holder = 0;
+  flags_holder = (flags >>(5-1));
+  if ((button_handler == 1) && ((flags_holder &1)== 0 )) {                                                                                                               
 
     if ((screen == 0) || (screen == 1)) {
       tests = tests + 5;
@@ -371,7 +371,7 @@ void handle_button(uint8_t button_handler) {
     flags |= B00000010;
   }//end UP
 
-  if ((button_handler == 2) && ((flags_holder & 1)==0) ){                                                                                                           
+  if ((button_handler == 2) && ((flags_holder & 1)== 0) ){                                                                                                           
 
     if ((screen == 0) || (screen == 1)) {
       if (tests > 5) {
@@ -389,7 +389,7 @@ void handle_button(uint8_t button_handler) {
     flags |= B00000010; 
   }//end DOWN
 
-  if ((button_handler == 3) && ((flags_holder & 1)==0))   {                                                                                                         
+  if ((button_handler == 3) && ((flags_holder & 1)== 0))   {                                                                                                         
 
     if (screen > 0) {
       screen--;
@@ -399,7 +399,7 @@ void handle_button(uint8_t button_handler) {
     flags |= B00000010;
   }//end LEFT
 
-  if ((button_handler == 4) && ((flags_holder & 1)==0)) {                                                                                                       
+  if ((button_handler == 4) && ((flags_holder & 1)== 0)) {                                                                                                       
 
     if (screen < 4) { // 01 , 2main menu, 34
       screen++;
@@ -415,7 +415,7 @@ void handle_button(uint8_t button_handler) {
     flags |= B00000010;
   }//end RIGHT
 
-  if ((button_handler == 5) && ((flags_holder & 1)==0)) {                                                                                                    
+  if ((button_handler == 5) && ((flags_holder & 1)== 0)) {                                                                                                    
     /*
       //This is a recently added checker used to try and pause while running.
       if (tests_needed == 1) {
@@ -474,7 +474,7 @@ ISR(TIMER1_COMPA_vect) {
       Serial.println("Held up long enough");
       cons_ups = 0;
       //button_flag = 1;                                                                                                                        ///3
-      flags   |= B00000100;
+      flags |= B00000100;
 
     }//end consecutive ups case
   }//end UP code
