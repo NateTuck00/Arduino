@@ -56,7 +56,9 @@ void setup() {
   display.setTextColor(SSD1306_WHITE);  
   display.display();
   display.clearDisplay();
-  
+
+  display.println("Setup");
+  display.display();
   rht.begin(RHT03_DATA_PIN);// We can check the connection here or in the while loop            
   pinMode(10, OUTPUT);//PWM control
   
@@ -84,6 +86,7 @@ void setup() {
   TIMSK3 |= (1 << OCIE3A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
+  display.clearDisplay();
 }//end void setup()
 
 
@@ -143,7 +146,7 @@ void loop() {
 
   switch(g_itr){
     case 0:
-    digitalWrite(6,HIGH);
+    //digitalWrite(6,HIGH);
     g_latestTempF= measureTemp();
     measureSetTemp();        
           
@@ -184,7 +187,7 @@ void loop() {
     //displayTemp();
     
     analogWrite(10,g_output);//PWM control for car heater written here 
-    digitalWrite(6,LOW);
+    //digitalWrite(6,LOW);
    //displayTemp();
 
   break;
