@@ -158,7 +158,9 @@ void loop() {
       }//if it randomly reads 99 on a bump and shorts
     }//end elseif 99+
     else{
-      recentValues[g_loops]=g_latestTempF;
+      recentValues[g_loops]=g_latestTempF;                                                                                                          // A flag can be added here to show that a fresh measurement was taken. 
+
+      
     }//endelse
 
     g_loops++;
@@ -195,9 +197,9 @@ void loop() {
 
     myOLED.print(toprint, LEFT, 0);
     //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
-    
+    myOLED.update();
   break;
-
+/*
     case 2: 
       myOLED.update(); 
       //myOLED.clrScr();
@@ -205,6 +207,7 @@ void loop() {
     
 
  break;
+  */
     
     default:;     //Nada
     
@@ -218,7 +221,7 @@ ISR(TIMER3_COMPA_vect){
 
 
   g_itr++;
-  if(g_itr == 3){
+  if(g_itr == 2){
     g_itr=0;
   }//endif
   
