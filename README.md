@@ -14,7 +14,7 @@ Projects included:
 
 UNO: This project runs on a 25 ms clock. The uno has an LCD, SD reader, and external protoshield for CAPs, resistors, and needed ICs. 
 
-LEONARDO: This project runs on a 25 ms clock due mainly to display.display() with the LCD screen. Without the screen a 10 ms interrupt is easily achievable. 
+LEONARDO: This project runs on a 25 ms clock due mainly to i2c time with the LCD screen. Without the screen a 10 ms interrupt is easily achievable. With overclocking the screen or i2c protocol this is also achievable. Writing one's own library like the https://github.com/bitbank2/BitBang_I2C library is obviously possible as well for even more speed optimization. 
 
 
 TIMERS
