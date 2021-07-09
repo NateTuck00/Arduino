@@ -69,7 +69,7 @@ void setup() {
   for(int i=0; i<10; i++){
     tempHolder=measureTemp();
     
-    while(tempHolder==0.0){//measure the temp again until it isn't dead on 0.0 ( we toss this errorcode when not getting a reading )
+    while((tempHolder==0.0)||(tempHolder==32.00)){//measure the temp again until it isn't dead on 0.0 ( we toss this errorcode when not getting a reading )
         tempHolder=measureTemp();
     }//end while
    
@@ -142,7 +142,7 @@ void loop() {
     g_latestTempF= measureTemp();
     measureSetTemp();        
           
-    if(g_latestTempF==0.0){
+    if((g_latestTempF==0.0)||(g_latestTempF==32.00)){
        sum=0;
        for(int i=0; i<10; i++){
           sum= sum + recentValues[i];   
@@ -197,9 +197,9 @@ void loop() {
 
     myOLED.print(toprint, LEFT, 0);
     //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
-    myOLED.update();
+    
   break;
-/*
+
     case 2: 
       myOLED.update(); 
       //myOLED.clrScr();
@@ -207,7 +207,7 @@ void loop() {
     
 
  break;
-  */
+  
     
     default:;     //Nada
     
@@ -221,7 +221,7 @@ ISR(TIMER3_COMPA_vect){
 
 
   g_itr++;
-  if(g_itr == 2){
+  if(g_itr == 3){
     g_itr=0;
   }//endif
   
