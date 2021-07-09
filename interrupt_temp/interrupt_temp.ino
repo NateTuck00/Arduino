@@ -1,21 +1,20 @@
   #include <SPI.h>
   #include <Wire.h>
-  #include <Adafruit_GFX.h>
-  #include <Adafruit_SSD1306.h>
-  #include <splash.h>             // may not be needed. 
+  
+  //#include <Adafruit_GFX.h>
+  //#include <Adafruit_SSD1306.h>
+  //#include <splash.h>             // may not be needed. 
+  #include<OLED_I2C.h>
+  
   #include <SparkFun_RHT03.h>
   #include <avr/wdt.h>            // Including watchdog timer
 
-  #define SCREEN_WIDTH 128 // OLED display width, in pixels
-  #define SCREEN_HEIGHT 32 // OLED display height, in pixels
-
-  #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
-  #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-  Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+  ////disp
 
   const int RHT03_DATA_PIN = 6; // RHT03 data pin
   RHT03 rht; // This creates a RTH03 object, which we'll use to interact with the sensor
-
+  OLED myOLED(SDA, SCL);
+  
   const uint8_t kp = 10;
   const uint8_t ki = 1;
   
@@ -30,8 +29,11 @@
   float sum;
   float dif;
 
+  String toprint;
+
   volatile int8_t  g_loops =0;//ISR iterators
   volatile int8_t g_itr=0;
+  extern uint8_t SmallFont [];
 
   
 //measureTemp: simple quick return of the temp in F. Can add humidity with some changes in return or a global
@@ -43,7 +45,10 @@ float measureTemp(){
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  if(!myOLED.begin(SSD1306_128X32))
+    while(1);   // In case the library failed to allocate enough RAM for the display buffer...
+    
+  //Serial.begin(9600);
   //Ports for dwrite
   //B: d8-13
   //C:Analog
@@ -53,12 +58,10 @@ void setup() {
   //DDRD = B00001000; // note 6 is defined after. We'll pick 4 to measure timing
   pinMode(6,OUTPUT);
 
-  display.setTextColor(SSD1306_WHITE);  
-  display.display();
-  display.clearDisplay();
-
-  display.println("Setup");
-  display.display();
+  myOLED.setFont(SmallFont);
+  myOLED.print("Setting up", LEFT, 0);
+  myOLED.update();
+  
   rht.begin(RHT03_DATA_PIN);// We can check the connection here or in the while loop            
   pinMode(10, OUTPUT);//PWM control
   
@@ -80,13 +83,13 @@ void setup() {
   TCCR3B = 0;                               // same for TCCR3B
   TCNT3  = 0;                               //initialize counter value to 0
   
-  OCR3A = 60000;                             // = (16*10^6) / (hz*prescaler) - 1 (must be <65536)    6249:25ms             2499:10ms
+  OCR3A = 6249;                             // = (16*10^6) / (hz*prescaler) - 1 (must be <65536)    6249:25ms             2499:10ms
   TCCR3B |= (1 << WGM32);                   // turn on CTC mode
   TCCR3B |= (1 << CS31) | (1 << CS30);      // Set CS31 and 30 for 64 prescaler 
   TIMSK3 |= (1 << OCIE3A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
-  display.clearDisplay();
+  myOLED.clrScr();
 }//end void setup()
 
 
@@ -124,17 +127,6 @@ double computePID(double inp) {
 
   return out;
 }// end computePID
-
-
-//displayTemp: A function that preloads our display memory before executing the display command on the next clock cycle
-void displayTemp(){
-  
-  display.clearDisplay();
-  display.setCursor(0,0);
-  display.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));// Cut out display.display()for clock time
-  //display.display(); 
-}//end displayTemp()
-
 
 
 void loop() {
@@ -188,22 +180,32 @@ void loop() {
     
     analogWrite(10,g_output);//PWM control for car heater written here 
     //digitalWrite(6,LOW);
-   //displayTemp();
+   
 
   break;
 
 
     case 1:
-    //PORTD = B00001000;
-    digitalWrite(6,HIGH);
-    //displayTemp();
-    //digitalWrite(6,LOW);
-    //PORTD = B00000000;
-    //display.display();
-    Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
-    digitalWrite(6,LOW);
-    break;
+    toprint= "Now: ";
+    toprint.concat(g_latestTempF);
+    toprint.concat(" Set: ");
+    toprint.concat(g_setPoint);
+    //myOLED.print(""); atoi of all the data to the buffer
+    //myOLED.print(stringvariable,LEFT,0); 
 
+    myOLED.print(toprint, LEFT, 0);
+    //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
+    
+  break;
+
+    case 2: 
+      myOLED.update(); 
+      //myOLED.clrScr();
+      //myOLED.update();
+    
+
+ break;
+    
     default:;     //Nada
     
   }//endswitch
@@ -216,7 +218,7 @@ ISR(TIMER3_COMPA_vect){
 
 
   g_itr++;
-  if(g_itr == 2){
+  if(g_itr == 3){
     g_itr=0;
   }//endif
   
