@@ -15,7 +15,7 @@
   RHT03 rht; // This creates a RTH03 object, which we'll use to interact with the sensor
   OLED myOLED(SDA, SCL);
   
-  const uint8_t kp = 10;
+  const uint8_t kp = 200;
   const uint8_t ki = 1;
   
   double g_previousTime;
@@ -35,6 +35,7 @@
   volatile int8_t g_itr = 0;
   extern uint8_t SmallFont [];
   uint8_t g_read_flag = 0;
+  uint8_t g_sensorfail = 0;
   
 //measureTemp: simple quick return of the temp in F. Can add humidity with some changes in return or a global
 float measureTemp(){
@@ -43,6 +44,7 @@ float measureTemp(){
   if(updateRet == 1){
     //Serial.println("Successful Ping");
     g_read_flag = 1;
+    g_sensorfail = 0;
   }//endif 1
   if(updateRet == 0){
     g_read_flag = 0;
@@ -217,10 +219,15 @@ void loop() {
     toprint.concat(g_setPoint);
     //myOLED.print(""); atoi of all the data to the buffer
     //myOLED.print(stringvariable,LEFT,0); 
-
-    myOLED.print(toprint, LEFT, 0);
-    //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
     
+    if( g_sensorfail != 1){
+      myOLED.print(toprint, LEFT, 0);
+    }//endif
+    //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
+
+    if(g_sensorfail == 1){
+      myOLED.print("Reading temp...", LEFT, 0);
+    }//endif fail
   break;
 
     case 2: 
@@ -249,7 +256,7 @@ ISR(TIMER3_COMPA_vect){
   if(g_read_flag == 0){
     cons_misreads++;// note that this can only change once for each 3 loops @ 25 ms a stage. 75ms loops. 
     if(cons_misreads > 400){
-       resetFunc();
+       g_sensorfail = 1;
     }//endif cons misreads
    }//endif misread
   g_itr++;
@@ -261,6 +268,7 @@ ISR(TIMER3_COMPA_vect){
 
 ISR(WDT_vect) // Watchdog timer interrupt.
 {
+  myOLED.clrScr();
 // Include your code here - be careful not to use functions they may cause the interrupt to hang and
 // prevent a reset.
   //Serial.println("We hit watchdogs here");
