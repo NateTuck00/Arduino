@@ -39,8 +39,18 @@
 //measureTemp: simple quick return of the temp in F. Can add humidity with some changes in return or a global
 float measureTemp(){
   int updateRet = rht.update();
+
+  if(updateRet == 1){
+    //Serial.println("Successful Ping");
+    //Serial.println(rht.tempF());
+    wdt_reset();                          // Note we only service the watchdog on confirmed good fires from our sensor
+  }//
+  
   return rht.tempF();
-}//end measureTemp
+
+  
+  
+}//measureTemp
 
 
 void setup() {
@@ -59,7 +69,7 @@ void setup() {
   pinMode(6,OUTPUT);
 
   myOLED.setFont(SmallFont);
-  myOLED.print("Setting up", LEFT, 0);
+  myOLED.print("Reading Temp...", LEFT, 0);
   myOLED.update();
   
   rht.begin(RHT03_DATA_PIN);// We can check the connection here or in the while loop            
@@ -75,7 +85,12 @@ void setup() {
    
     recentValues[i]=tempHolder;
   }//endfor
+
   
+
+  wdt_reset();
+  WDTCSR |= (1 << WDCE)|(1 << WDE);
+  WDTCSR  = (1 << WDIE)|(1 << WDE)|(1 << WDP3)|(0 << WDP2)|(0 << WDP1)|(1 <<WDP0);
   ///////////////////////////////////////////
   //Timer Section. Editing is very dangerous. 
   ///////////////////////////////////////////
@@ -89,6 +104,7 @@ void setup() {
   TIMSK3 |= (1 << OCIE3A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
+  
   myOLED.clrScr();
 }//end void setup()
 
@@ -156,10 +172,12 @@ void loop() {
       if (abs(dif) >20){
         recentValues[g_loops]= g_avg;   
       }//if it randomly reads 99 on a bump and shorts
+       
     }//end elseif 99+
     else{
-      recentValues[g_loops]=g_latestTempF;                                                                                                          // A flag can be added here to show that a fresh measurement was taken. 
-
+      //Serial.println("Fresh value assumed in software");
+      //Serial.println(g_latestTempF);
+      recentValues[g_loops]=g_latestTempF;                                                                       // A flag can be added here to show that a fresh measurement was taken. 
       
     }//endelse
 
@@ -168,7 +186,7 @@ void loop() {
       g_loops=0;
     }//endif
 
-    g_output= computePID(g_latestTempF); 
+    g_output= computePID(recentValues[g_loops]); //note this was g_latestTempF but to incorporate the bounds checks with 32.00 and 0.0 we use the same value as we already checked
     
     //check output bounds
     if(g_output > 229){
@@ -226,3 +244,10 @@ ISR(TIMER3_COMPA_vect){
   }//endif
   
 }//end ISR()
+
+ISR(WDT_vect) // Watchdog timer interrupt.
+{
+// Include your code here - be careful not to use functions they may cause the interrupt to hang and
+// prevent a reset.
+  //Serial.println("We hit watchdogs here");
+}//end ISR WDT
