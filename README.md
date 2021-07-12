@@ -1,8 +1,8 @@
 # Arduino
 Work's arduino files
 
-This is my collection of code I've written for Holley Performance Products over the summer of 2021. 
-Wiring schematics and datasheets for external parts can be found by contacting me at nathantucker@holley.com
+This is my collection of code I've written for work over the summer of 2021. 
+Wiring schematics and datasheets for external parts can be provided.
 Both of my main projects run a real time control system. Not all code in this library is written on interrupt driven code, but all code will be on a clock in final implementation.
 
 
