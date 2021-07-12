@@ -31,10 +31,10 @@
 
   String toprint;
 
-  volatile int8_t  g_loops =0;//ISR iterators
-  volatile int8_t g_itr=0;
+  volatile int8_t  g_loops = 0;//ISR iterators
+  volatile int8_t g_itr = 0;
   extern uint8_t SmallFont [];
-
+  uint8_t g_read_flag = 0;
   
 //measureTemp: simple quick return of the temp in F. Can add humidity with some changes in return or a global
 float measureTemp(){
@@ -42,19 +42,23 @@ float measureTemp(){
 
   if(updateRet == 1){
     //Serial.println("Successful Ping");
-    //Serial.println(rht.tempF());
-    wdt_reset();                          // Note we only service the watchdog on confirmed good fires from our sensor
-  }//
-  
+    g_read_flag = 1;
+  }//endif 1
+  if(updateRet == 0){
+    g_read_flag = 0;
+  }//endif 0 
   return rht.tempF();
 
   
   
 }//measureTemp
 
+void(* resetFunc) (void) = 0;
 
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(9600);
+  
   if(!myOLED.begin(SSD1306_128X32))
     while(1);   // In case the library failed to allocate enough RAM for the display buffer...
     
@@ -151,7 +155,8 @@ void loop() {
   //0: measure temp, measure set temp, constrain, computePID, analogwrite
   //1: display temp. PORTD = B00001000
   //                 PORTD = B00000000 
-
+  wdt_reset();
+  
   switch(g_itr){
     case 0:
     //digitalWrite(6,HIGH);
@@ -197,7 +202,7 @@ void loop() {
       g_output=26; 
     }//endif out of bounds
     //displayTemp();
-    
+    Serial.println(g_output);
     analogWrite(10,g_output);//PWM control for car heater written here 
     //digitalWrite(6,LOW);
    
@@ -235,9 +240,18 @@ void loop() {
 }//end void loop()
 
 
+  uint8_t cons_misreads = 0;
 ISR(TIMER3_COMPA_vect){
-
-
+  if(g_read_flag == 1){
+    cons_misreads = 0;
+  }//endif successful read
+  
+  if(g_read_flag == 0){
+    cons_misreads++;// note that this can only change once for each 3 loops @ 25 ms a stage. 75ms loops. 
+    if(cons_misreads > 400){
+       resetFunc();
+    }//endif cons misreads
+   }//endif misread
   g_itr++;
   if(g_itr == 3){
     g_itr=0;
