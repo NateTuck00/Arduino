@@ -16,6 +16,7 @@ UNO: This project runs on a 25 ms clock. The uno has an LCD, SD reader, and exte
 
 LEONARDO: This project runs on a 25 ms clock due mainly to i2c time with the LCD screen. Without the screen a 10 ms interrupt is easily achievable. With overclocking the screen or i2c protocol this is also achievable. Writing one's own library like the https://github.com/bitbank2/BitBang_I2C library is obviously possible as well for even more speed optimization. 
 
+ZERO: I used an arduino Zero with Pi-Hole to reroute my DNS in my house and block all ads across our entire wifi network
 
 TIMERS
   The timers in this code can be different for people unexperienced with Arduino Registers and timers. Basically, Arduinos come with several timers (3 or more usually) and by  setting a count number and prescaler multiple to increment your counter by. The rest of the code is standard C with the use of documented libraries. By following the guide at https://www.instructables.com/Arduino-Timer-Interrupts/ you should be able to understand and copy what I've done here. 
