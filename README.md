@@ -1,8 +1,8 @@
 # Arduino
 Work's arduino files
 
-This is my collection of code I've written for Holley Performance Products over the summer of 2021. 
-Wiring schematics and datasheets for external parts can be found by contacting me at nathantucker@holley.com
+This is my collection of code I've written for work over the summer of 2021. 
+Wiring schematics and datasheets for external parts can be provided.
 Both of my main projects run a real time control system. Not all code in this library is written on interrupt driven code, but all code will be on a clock in final implementation.
 
 
@@ -14,7 +14,7 @@ Projects included:
 
 UNO: This project runs on a 25 ms clock. The uno has an LCD, SD reader, and external protoshield for CAPs, resistors, and needed ICs. 
 
-LEONARDO: This project runs on a 25 ms clock due mainly to display.display() with the LCD screen. Without the screen a 10 ms interrupt is easily achievable. 
+LEONARDO: This project runs on a 25 ms clock due mainly to i2c time with the LCD screen. Without the screen a 10 ms interrupt is easily achievable. With overclocking the screen or i2c protocol this is also achievable. Writing one's own library like the https://github.com/bitbank2/BitBang_I2C library is obviously possible as well for even more speed optimization. 
 
 
 TIMERS
