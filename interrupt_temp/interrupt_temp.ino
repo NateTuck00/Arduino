@@ -34,6 +34,7 @@
   volatile int8_t  g_loops = 0;//ISR iterators
   volatile int8_t g_itr = 0;
   extern uint8_t SmallFont [];
+  extern uint8_t MediumNumbers [];
   uint8_t g_read_flag = 0;
   uint8_t g_sensorfail = 0;
   
@@ -75,7 +76,9 @@ void setup() {
   pinMode(6,OUTPUT);
 
   myOLED.setFont(SmallFont);
-  myOLED.print("Reading Temp...", LEFT, 0);
+  //myOLED.setFont(MediumNumbers);
+  
+  myOLED.print("Reading...", LEFT, 0);
   myOLED.update();
   
   rht.begin(RHT03_DATA_PIN);// We can check the connection here or in the while loop            
@@ -110,7 +113,7 @@ void setup() {
   TIMSK3 |= (1 << OCIE3A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
-  
+  myOLED.setFont(MediumNumbers);
   myOLED.clrScr();
 }//end void setup()
 
@@ -213,10 +216,10 @@ void loop() {
 
 
     case 1:
-    toprint= "Now: ";
+    toprint= "";
     toprint.concat(g_latestTempF);
-    toprint.concat(" Set: ");
-    toprint.concat(g_setPoint);
+    //toprint.concat(" ");
+    toprint.concat(" ",g_setPoint);
     //myOLED.print(""); atoi of all the data to the buffer
     //myOLED.print(stringvariable,LEFT,0); 
     
@@ -226,7 +229,7 @@ void loop() {
     //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
 
     if(g_sensorfail == 1){
-      myOLED.print("Reading temp...", LEFT, 0);
+      myOLED.print("Reading ...", LEFT, 0);
     }//endif fail
   break;
 
