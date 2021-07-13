@@ -21,6 +21,7 @@
   double g_previousTime;
   double g_lastError;
   double g_output, g_setPoint;
+  double g_lastsp = 60;
   double g_cumulativeError;
 
   float g_latestTempF;
@@ -29,12 +30,10 @@
   float sum;
   float dif;
 
-  String toprint;
-
   volatile int8_t  g_loops = 0;//ISR iterators
   volatile int8_t g_itr = 0;
   extern uint8_t SmallFont [];
-  extern uint8_t MediumNumbers [];
+  extern uint8_t BigNumbers [];
   uint8_t g_read_flag = 0;
   uint8_t g_sensorfail = 0;
   
@@ -113,7 +112,7 @@ void setup() {
   TIMSK3 |= (1 << OCIE3A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
-  myOLED.setFont(MediumNumbers);
+  myOLED.setFont(BigNumbers);
   myOLED.clrScr();
 }//end void setup()
 
@@ -207,7 +206,7 @@ void loop() {
       g_output=26; 
     }//endif out of bounds
     //displayTemp();
-    Serial.println(g_output);
+    //Serial.println(g_output);
     analogWrite(10,g_output);//PWM control for car heater written here 
     //digitalWrite(6,LOW);
    
@@ -216,24 +215,28 @@ void loop() {
 
 
     case 1:
-    toprint= "";
-    toprint.concat(g_latestTempF);
-    //toprint.concat(" ");
-    toprint.concat(" ",g_setPoint);
-    //myOLED.print(""); atoi of all the data to the buffer
-    //myOLED.print(stringvariable,LEFT,0); 
+    myOLED.clrScr();
     
     if( g_sensorfail != 1){
-      myOLED.print(toprint, LEFT, 0);
-    }//endif
-    //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
+      myOLED.printNumF(g_latestTempF, 1, LEFT, 0);
+     
+      if ((abs(g_setPoint - g_lastsp)) > .3){
+         myOLED.printNumF(g_setPoint, 1, 70, 0);
+         g_lastsp = g_setPoint; 
+      }//endif dif >.2
+     
+    }//endif no sensor fail
+    Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
 
     if(g_sensorfail == 1){
       myOLED.print("Reading ...", LEFT, 0);
     }//endif fail
+    
+    
   break;
 
     case 2: 
+      //myOLED.clrScr();
       myOLED.update(); 
       //myOLED.clrScr();
       //myOLED.update();
