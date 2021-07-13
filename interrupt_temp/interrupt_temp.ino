@@ -36,6 +36,7 @@
   extern uint8_t BigNumbers [];
   uint8_t g_read_flag = 0;
   uint8_t g_sensorfail = 0;
+  uint8_t g_clr_cnt = 0;
   
 //measureTemp: simple quick return of the temp in F. Can add humidity with some changes in return or a global
 float measureTemp(){
@@ -215,7 +216,9 @@ void loop() {
 
 
     case 1:
-    myOLED.clrScr();
+    if(g_clr_cnt == 0){
+      myOLED.clrScr();
+    }//endif
     
     if( g_sensorfail != 1){
       myOLED.printNumF(g_latestTempF, 1, LEFT, 0);
@@ -223,6 +226,7 @@ void loop() {
       if ((abs(g_setPoint - g_lastsp)) > .3){
          myOLED.printNumF(g_setPoint, 1, 70, 0);
          g_lastsp = g_setPoint; 
+         g_clr_cnt = 1;     
       }//endif dif >.2
      
     }//endif no sensor fail
@@ -232,6 +236,12 @@ void loop() {
       myOLED.print("Reading ...", LEFT, 0);
     }//endif fail
     
+    if(g_clr_cnt >= 1){
+      g_clr_cnt++;
+      if(g_clr_cnt >= 40){
+        g_clr_cnt = 0;
+      }//endif 40
+    }//endif
     
   break;
 
