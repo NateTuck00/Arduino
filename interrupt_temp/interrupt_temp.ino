@@ -15,7 +15,7 @@
   RHT03 rht; // This creates a RTH03 object, which we'll use to interact with the sensor
   OLED myOLED(SDA, SCL);
   
-  const uint8_t kp = 200;
+  const uint8_t kp = 20;
   const uint8_t ki = 1;
   
   double g_previousTime;
@@ -43,7 +43,8 @@ float measureTemp(){
   int updateRet = rht.update();
 
   if(updateRet == 1){
-    //Serial.println("Successful Ping");
+    Serial.print("Successful Ping of ");
+    Serial.println(rht.tempF());
     g_read_flag = 1;
     g_sensorfail = 0;
   }//endif 1
@@ -131,17 +132,19 @@ double computePID(double inp) {
   double currentTime = millis();// This doesn't need to be a float, but it ensures our errors are floats for precision
   double elapsedTime = (double)(currentTime - g_previousTime);
 
-  double error = g_setPoint - inp; // error here means how far off our temperature is from user input.
+
+  //swapped setpoint-inp to reverse pid
+  double error = inp - g_setPoint; // error here means how far off our temperature is from user input.
   g_cumulativeError += error * elapsedTime;//We want to clamp this to be roughly the max output value it can contribute to 229 (and we'll likely have error) 
 
-  if(abs(g_cumulativeError*ki)>220){
+  if(abs(g_cumulativeError*ki)>40){
 
-    if(g_cumulativeError > (220/ki)){
-      g_cumulativeError=(220/ki); 
+    if(g_cumulativeError > (10/ki)){
+      g_cumulativeError=(160/ki); 
     }//endif positive cumulative error
 
-    if(g_cumulativeError < (-220/ki)){
-      g_cumulativeError=(-220/ki);   
+    if(g_cumulativeError < (-70/ki)){
+      g_cumulativeError=(-70/ki);   
     }//endif negative cumulative error
     
   }//endif cumulating error either direction
@@ -150,6 +153,7 @@ double computePID(double inp) {
   g_lastError = error;
   g_previousTime = currentTime;
 
+  
   return out;
 }// end computePID
 
@@ -216,6 +220,8 @@ void loop() {
 
 
     case 1:
+
+    
     if(g_clr_cnt == 0){
       myOLED.clrScr();
     }//endif
@@ -230,10 +236,12 @@ void loop() {
       }//endif dif >.2
      
     }//endif no sensor fail
-    Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
+    //Serial.println("Curr: " +String(g_latestTempF,1)+ " Set: " + String(g_setPoint));
 
     if(g_sensorfail == 1){
+      myOLED.setFont(SmallFont);
       myOLED.print("Reading ...", LEFT, 0);
+      myOLED.printNumF(g_setPoint, 1, 90, 0);
     }//endif fail
     
     if(g_clr_cnt >= 1){
@@ -250,7 +258,9 @@ void loop() {
       myOLED.update(); 
       //myOLED.clrScr();
       //myOLED.update();
-    
+      myOLED.setFont(BigNumbers);
+
+     
 
  break;
   
@@ -263,7 +273,7 @@ void loop() {
 }//end void loop()
 
 
-  uint8_t cons_misreads = 0;
+  uint16_t cons_misreads = 0;
 ISR(TIMER3_COMPA_vect){
   if(g_read_flag == 1){
     cons_misreads = 0;
@@ -271,7 +281,8 @@ ISR(TIMER3_COMPA_vect){
   
   if(g_read_flag == 0){
     cons_misreads++;// note that this can only change once for each 3 loops @ 25 ms a stage. 75ms loops. 
-    if(cons_misreads > 400){
+    //Serial.println(cons_misreads);
+    if(cons_misreads > 3500){
        g_sensorfail = 1;
     }//endif cons misreads
    }//endif misread
