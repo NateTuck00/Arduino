@@ -9,25 +9,25 @@
 
 double tempPID::computePID(tempPID tp) {
   double currentTime = millis();
-  double elapsedTime = (double)(currentTime - tp.g_previousTime);
+  double elapsedTime = (double)(currentTime - tp.dbl_previousTime);
 
-  double error = temp_inp - g_setPoint; // error here means how far off our temp_input temp is from where the gauge is set
-  g_cumulativeError += error * elapsedTime;//We clamp how much this can affect our output below to prevent windup 
+  double error = dbl_temp_inp - dbl_setPoint; // error here means how far off our temp_input temp is from where the gauge is set
+  dbl_cumulativeError += error * elapsedTime;//We clamp how much this can affect our output below to prevent windup 
 
-  if(abs(g_cumulativeError*ki)>40){
+  if(abs(dbl_cumulativeError*c_ki)>40){
 
-    if(g_cumulativeError > (10/ki)){
-      g_cumulativeError=(160/ki); 
+    if(dbl_cumulativeError > (10/c_ki)){
+      dbl_cumulativeError=(160/c_ki); 
     }//endif positive cumulative error
 
-    if(g_cumulativeError < (-70/ki)){
-      g_cumulativeError=(-70/ki);   
+    if(dbl_cumulativeError < (-70/c_ki)){
+      dbl_cumulativeError=(-70/c_ki);   
     }//endif negative cumulative error
     
   }//endif cumulating error either direction
   
-  double out = kp * error + ki * g_cumulativeError;//output determined by I and P. 
-  g_previousTime = currentTime;
+  double out = c_kp * error + c_ki * dbl_cumulativeError;//output determined by I and P. 
+  dbl_previousTime = currentTime;
 
   //check output bounds
     if(out > 229){
