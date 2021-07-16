@@ -7,7 +7,7 @@ ISR(TIMER3_COMPA_vect){
   
   if(g_read_flag == 0){
     cons_misreads++;
-    if(cons_misreads > 3500){
+    if(cons_misreads > 10){
        g_sensorfail = 1;
     }//endif cons misreads
    }//endif misread

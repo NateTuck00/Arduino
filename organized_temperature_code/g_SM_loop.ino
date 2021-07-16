@@ -8,8 +8,13 @@ void loop(){
   switch(g_itr){
     
     case 0://measure temp, measure set temp, constrain, computePID, analogwrite
+
+    g_temp_itr++;
+    if(g_temp_itr == 4000){
+      g_f_latestTempF = measureTemp();
+      g_temp_itr = 0;
+    }
     
-    g_f_latestTempF = measureTemp();
     measureSetTemp();        
     checkTempBounds();
 

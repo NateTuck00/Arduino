@@ -1,4 +1,5 @@
 void setup() {
+  Serial.begin(115200);
   
   if(!myOLED.begin(SSD1306_128X32))
     while(1);   // In case the library failed to allocate enough RAM for the display buffer...
@@ -7,7 +8,7 @@ void setup() {
   myOLED.print("Reading...", LEFT, 0);
   myOLED.update();
   
-  rht.begin(RHT03_DATA_PIN);            
+  //rht.begin(RHT03_DATA_PIN);            
   pinMode(10, OUTPUT);//PWM control
   
   float tempHolder=0.0;
@@ -15,6 +16,8 @@ void setup() {
     tempHolder=measureTemp();
     while((tempHolder==0.0)||(tempHolder==32.00)){//measure the temp again until it isn't dead on 0.0 ( we toss this errorcode when not getting a reading )
         tempHolder=measureTemp();
+        delay(2000);
+        
     }//end while
     g_f_recentValues[i]=tempHolder;
   }//endfor
