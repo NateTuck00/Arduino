@@ -13,8 +13,8 @@ void setup() {
   if(!myOLED.begin(SSD1306_128X32))
     while(1);  
 
-    //myOLED.setFont(SmallFont);
-    myOLED.setFont(BigNumbers);
+    myOLED.setFont(SmallFont);
+    //myOLED.setFont(BigNumbers);
 }//end void setup()
 
 String toprint ="";
@@ -23,8 +23,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   myOLED.clrScr();
   
-  myOLED.printNumF(c_temp,1, LEFT, 0);
-  myOLED.printNumF(s_temp,1, 70, 0);
+  myOLED.printNumF(c_temp, 1, LEFT, 0);
+  myOLED.print("EC:1", 45, 0);
+  myOLED.printNumF(s_temp, 1, 90, 0);
   myOLED.update();
 
 }//end void loop()
