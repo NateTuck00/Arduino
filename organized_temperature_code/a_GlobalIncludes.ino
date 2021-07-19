@@ -33,3 +33,10 @@
   uint8_t g_read_flag = 0;
   uint8_t g_sensorfail = 0;
   uint8_t g_clr_cnt = 0;
+  uint8_t g_blink_cnt = 0;
+  uint8_t g_temp_timeout = 0;
+  uint8_t g_voltage_warning = 0;
+  uint8_t g_battery_shutoff = 0; 
+
+  uint32_t g_below_goal = 0;
+  uint32_t g_above_goal = 0;  //this can be used to count temp timeout. 2400 25ms loops= 1min
