@@ -28,7 +28,7 @@ float measureTemp(){
 
   float temp = DHT.temperature;
   temp = ((1.8)*temp);     //Celsius to Fahrenheit
-  temp = temp + 32;
+  temp = temp + 32;        
   return temp;// Note we can also pull a tempC or humidity
   
 }//end measureTemp

@@ -54,10 +54,10 @@ void loop(){
     }//endif
     
     else if( g_sensorfail != 1){
-      myOLED.printNumF(g_f_latestTempF, 1, LEFT, 0);
-      
-      if ((abs(tp.dbl_setPoint - g_lastsp)) > .3){
-         myOLED.printNumF(tp.dbl_setPoint, 1, 70, 0);
+      myOLED.printNumF(g_f_latestTempF, 0, LEFT, 0);
+      myOLED.printNumF(g_output, 0, 40, 0);
+      if ((abs(tp.dbl_setPoint - g_lastsp)) > .4){
+         myOLED.printNumF(tp.dbl_setPoint, 0, 95, 0);
          g_lastsp = tp.dbl_setPoint; 
          g_clr_cnt = 1;     
       }//endif dif >.3

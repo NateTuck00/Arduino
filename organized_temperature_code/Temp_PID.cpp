@@ -11,7 +11,8 @@ double tempPID::computePID(tempPID tp) {
   double currentTime = millis();
   double elapsedTime = (double)(currentTime - tp.dbl_previousTime);
 
-  double error = dbl_temp_inp - dbl_setPoint; // error here means how far off our temp_input temp is from where the gauge is set
+
+  double error = dbl_setPoint - dbl_temp_inp; // error here means how far off our temp_input temp is from where the gauge is set
   dbl_cumulativeError += error * elapsedTime;//We clamp how much this can affect our output below to prevent windup 
 
   if(abs(dbl_cumulativeError*c_ki)>40){
@@ -21,7 +22,7 @@ double tempPID::computePID(tempPID tp) {
     }//endif positive cumulative error
 
     if(dbl_cumulativeError < (-70/c_ki)){
-      dbl_cumulativeError=(-70/c_ki);   
+      dbl_cumulativeError=(-50/c_ki);                 // from -70 to -50
     }//endif negative cumulative error
     
   }//endif cumulating error either direction
