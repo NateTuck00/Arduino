@@ -98,7 +98,7 @@ void loop(){
     case 2: //update display. Check font in case of previous error codes swapping to small font
       myOLED.update(); 
       myOLED.setFont(BigNumbers);
-      measureBatteryVoltage();
+      //measureBatteryVoltage();
   break;  
     
     default:;     //Nada

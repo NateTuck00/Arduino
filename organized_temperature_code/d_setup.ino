@@ -1,8 +1,17 @@
 void setup() {
   Serial.begin(115200);
   
-  if(!myOLED.begin(SSD1306_128X32))
-    while(1);   // In case the library failed to allocate enough RAM for the display buffer...
+  
+  //myOLED.begin();
+  delay(1000);
+  pinMode( resetPin, OUTPUT ); // Setup reset pin direction (used by both SPI and I2C)
+  digitalWrite( resetPin, HIGH );
+  delay( 1 ); // VDD (3.3V) goes high at start, lets just chill for a ms
+  digitalWrite( resetPin, LOW ); // bring reset low
+  delay( 10 ); // wait 10ms
+  digitalWrite( resetPin, HIGH ); // bring out of reset
+
+  myOLED.begin(SSD1306_128X32);
     
   myOLED.setFont(SmallFont);
   myOLED.print("Reading...", LEFT, 0);

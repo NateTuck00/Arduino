@@ -12,7 +12,9 @@
   //RHT03 rht; // This creates a RTH03 object, which we'll use to interact with the sensor
   #define DHT22_PIN 6
   dht DHT;
-  OLED myOLED(SDA, SCL);
+  OLED myOLED(SDA, SCL, 4);//added 
+  
+  #define resetPin 4
   
   tempPID tp;// a custom class built for our temp PID
 
