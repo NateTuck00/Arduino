@@ -13,7 +13,8 @@ void displayLogic(){
       myOLED.printNumF(g_f_latestTempF, 1, LEFT, 0);
       g_blink_cnt++;
       
-      if(g_blink_cnt != 10){                               //if it isn't blink time
+      if(g_blink_cnt != 10){                               
+        //if it isn't blink time
         myOLED.print("EC:1", 45, 0);
         myOLED.printNumF(tp.dbl_setPoint, 1, 90, 0); 
       }//endnestedif
@@ -22,7 +23,7 @@ void displayLogic(){
     else if( g_sensorfail != 1){
       myOLED.printNumF(g_f_latestTempF, 0, LEFT, 0);
       myOLED.printNumF(g_output, 0, 40, 0);
-      if ((abs(tp.dbl_setPoint - g_lastsp)) > .4){          //.4 here is a limit to change in set temp before we recognize it
+      if ((abs(tp.dbl_setPoint - g_lastsp)) > .4){    //.4 here is a limit to change in set temp before we recognize it
          myOLED.printNumF(tp.dbl_setPoint, 0, 95, 0);
          g_lastsp = tp.dbl_setPoint; 
          g_clr_cnt = 1;     
