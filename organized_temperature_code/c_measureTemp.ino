@@ -5,7 +5,7 @@ float measureTemp(){
   switch (chk)
   {
     case DHTLIB_OK:  
-    Serial.println("Ping"); 
+    Serial.println("Ping");//all good
     g_read_flag = 1;
     g_sensorfail = 0;
     break;

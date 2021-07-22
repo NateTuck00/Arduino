@@ -2,7 +2,7 @@ void setup() {
   Serial.begin(115200);
   
   
-  //myOLED.begin();
+  //display reset
   delay(1000);
   pinMode( resetPin, OUTPUT ); // Setup reset pin direction (used by both SPI and I2C)
   digitalWrite( resetPin, HIGH );
@@ -11,13 +11,12 @@ void setup() {
   delay( 10 ); // wait 10ms
   digitalWrite( resetPin, HIGH ); // bring out of reset
 
+
   myOLED.begin(SSD1306_128X32);
-    
   myOLED.setFont(SmallFont);
   myOLED.print("Reading...", LEFT, 0);
   myOLED.update();
-  
-  //rht.begin(RHT03_DATA_PIN);            
+             
   pinMode(10, OUTPUT);//PWM control
   
   float tempHolder=0.0;

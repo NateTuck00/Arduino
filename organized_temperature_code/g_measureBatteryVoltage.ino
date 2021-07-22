@@ -6,7 +6,7 @@ void measureBatteryVoltage(){
   float sensorVal = analogRead(A1);
   float volt = (sensorVal/1023) * 12.6;
 
-  if (volt < 2.5){      // if we're really below 12.6 volts
+  if (volt < 2.5){           // if we're really below 12.6 volts
     g_voltage_warning++;
   }//endif
 

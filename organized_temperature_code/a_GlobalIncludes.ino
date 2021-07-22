@@ -1,41 +1,36 @@
   #include <SPI.h>
   #include <Wire.h> 
   #include <OLED_I2C.h>
-  //#include <SparkFun_RHT03.h>
   #include <avr/wdt.h>            
-
   #include "Temp_PID.h"
   #include "a_dht.h"
-  
     
-  const int RHT03_DATA_PIN = 6; // RHT03 data pin
-  //RHT03 rht; // This creates a RTH03 object, which we'll use to interact with the sensor
+  const int RHT03_DATA_PIN = 6;
   #define DHT22_PIN 6
   dht DHT;
-  OLED myOLED(SDA, SCL, 4);//added 
-  
-  #define resetPin 4
+  OLED myOLED(SDA, SCL, 4);//added  the 4 as a redundant reset pin
+  #define resetPin 4       //redundancy 
   
   tempPID tp;// a custom class built for our temp PID
 
-  double g_output;
-  double g_lastsp = 60;
+  double g_output;//0-255 AnalogWrite PWM
+  double g_lastsp = 60;//Last SetPoint
   
   float g_f_latestTempF;
-  float g_f_avg;
-  float g_f_recentValues[10];
+  float g_f_avg;//temp average
+  float g_f_recentValues[10];//recent temp values
 
   volatile int8_t  g_loops = 0;//ISR iterators
   volatile int8_t g_itr = 0;
   volatile int16_t g_temp_itr = 0;
   
-  extern uint8_t SmallFont [];
-  extern uint8_t BigNumbers [];
+  extern uint8_t SmallFont [];//a character class for the display
+  extern uint8_t BigNumbers [];//nums for display
   
   uint8_t g_read_flag = 0;
   uint8_t g_sensorfail = 0;
-  uint8_t g_clr_cnt = 0;
-  uint8_t g_blink_cnt = 0;
+  uint8_t g_clr_cnt = 0;//clear display
+  uint8_t g_blink_cnt = 0;//blink display
   uint8_t g_temp_timeout = 0;
   uint8_t g_voltage_warning = 0;
   uint8_t g_battery_shutoff = 0; 
