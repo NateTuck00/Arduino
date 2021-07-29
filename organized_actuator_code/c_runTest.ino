@@ -16,7 +16,8 @@ void runTest() {
     lcd.print(myStg[i]);
   }//endfor
 
-  delay(2000);
+  delay(2000);                    // Add in the control here for the relays
+  
   lcd.clear();
   tests--;
 

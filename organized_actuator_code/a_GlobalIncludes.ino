@@ -3,7 +3,7 @@
 
 File myFile;
 
-#include <Wire.h>
+//#include <Wire.h>
 #include <Adafruit_RGBLCDShield.h>
 #include <utility/Adafruit_MCP23017.h>
 
@@ -21,7 +21,7 @@ uint16_t tests = 1; // if on right screen up by 100 start on 100. left=1 go up b
 uint8_t screen = 2; // Use left and right as iterator for screen if not running
 //uint8_t pressure;//eventually if can't return it as function or flag high or low
 
-uint8_t flags = 0; // flags |= B00000000
+uint8_t flags = 0; // flags |= B00000000              // 6 in use. 7 can be switch flag
 uint8_t flags_holder = 0;
 
 uint8_t button_code = 0;

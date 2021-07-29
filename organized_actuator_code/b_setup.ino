@@ -5,18 +5,17 @@ void setup() {
     ;
   }//endwhile
 
-
   lcd.begin(16, 2);
   lcd.setBacklight(VIOLET);
 
   if (!SD.begin(9)) {
-    Serial.println("Initialization failed!");
+    Serial.println("SD Initialization failed!");
     lcd.clear();
     lcd.print("Initialization failed");
     lcd.setBacklight(RED);
     while (1);
   }//endif
-  Serial.println ("Initialization done.");
+  Serial.println ("SD Initialization done.");
 
   myFile = SD.open ("test.txt", FILE_WRITE);//Open the file. Note that you can only open one file at a time. You must close this one before opening the next.
 
@@ -26,8 +25,9 @@ void setup() {
     myFile.println("testing 1, 2, 3.");         // This writes into the actual file
     myFile.close();
     Serial.println("Done writing to file.");
-  }//endif.
+  }//endif
 
+  
   else {
     Serial.println("Error opening test.txt");
   }//endelse
