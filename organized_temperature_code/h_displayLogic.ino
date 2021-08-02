@@ -33,7 +33,7 @@ void displayLogic(){
     
     else if( g_sensorfail != 1){
       myOLED.printNumF(g_f_latestTempF, 0, LEFT, 0);
-      myOLED.printNumF(g_output, 0, 40, 0);
+      //myOLED.printNumF(g_output, 0, 40, 0);
       if ((abs(tp.dbl_setPoint - g_lastsp)) > .4){    //.4 here is a limit to change in set temp before we recognize it
          myOLED.printNumF(tp.dbl_setPoint, 0, 95, 0);
          g_lastsp = tp.dbl_setPoint; 
@@ -57,7 +57,7 @@ void displayLogic(){
     
     if(g_clr_cnt >= 1){
       g_clr_cnt++;
-      if(g_clr_cnt >= 40){
+      if(g_clr_cnt >= 80){
         g_clr_cnt = 0;
       }//endif 40
     }//endif
