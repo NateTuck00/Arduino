@@ -1,6 +1,7 @@
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
+  
   while (!Serial) {
     ;
   }//endwhile
@@ -61,7 +62,11 @@ void setup() {
   TCCR1B |= (1 << CS11) | (1 << CS10);      // Set CS11 and 10 for 64 prescaler
   TIMSK1 |= (1 << OCIE1A);                  // enable timer compare interrupt
   /////////////////////////////////////////
-
+  
   Serial.println("Setup Complete");
   lcd.print("Left+5 Right+100");
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  digitalWrite(1,LOW);
+  digitalWrite(2,LOW);
 }//endvoid setup
