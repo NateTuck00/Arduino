@@ -7,7 +7,6 @@ uint8_t cons_selects = 0;
 ISR(TIMER1_COMPA_vect) {
   //Serial.println("ISR ");
   //read_button();//Sets the button_code variable
-
   /*
     if(manual_motor_on == 1){
       // can add an && above with specific iterator to adjust the length of manual control. Want to test with pressure sensor on 5v to see where to call disaster as well as to test length of pull (although only 2" variance)
@@ -20,6 +19,17 @@ ISR(TIMER1_COMPA_vect) {
     }//endif motor manually turned on
 
   */
+
+  /*
+   * if(tests_neeeded == 1)
+   * flags_holder = 0;
+     flags_holder= (flags >> (1-1));
+     if ((flags_holder & 1)== 1) {
+   *   runTest
+   * }
+   * 
+   */
+
 
   if (button_code == 1) {
     cons_ups++;

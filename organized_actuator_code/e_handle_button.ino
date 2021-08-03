@@ -28,8 +28,8 @@ void handle_button(uint8_t button_handler) {
     }//endif disaster
   */
   flags_holder = 0;
-  flags_holder = (flags >>(5-1));
-  if ((button_handler == 1) && ((flags_holder &1)== 0 )) {                                                                                                               
+  flags_holder = (flags >> (5 - 1));
+  if ((button_handler == 1) && ((flags_holder & 1) == 0 )) {
 
     if ((screen == 0) || (screen == 1)) {
       tests = tests + 5;
@@ -38,11 +38,11 @@ void handle_button(uint8_t button_handler) {
       tests = tests + 100;
     }//endnestedif
 
-    //newdisp_needed = 1;                                                                                                                                     
+    //newdisp_needed = 1;
     flags |= B00000010;
   }//end UP
 
-  if ((button_handler == 2) && ((flags_holder & 1)== 0) ){                                                                                                           
+  if ((button_handler == 2) && ((flags_holder & 1) == 0) ) {
 
     if ((screen == 0) || (screen == 1)) {
       if (tests > 5) {
@@ -56,37 +56,37 @@ void handle_button(uint8_t button_handler) {
       }//enddoublynestedif
     }//endnestedif
 
-    //newdisp_needed = 1;                                                                                                                                     
-    flags |= B00000010; 
+    //newdisp_needed = 1;
+    flags |= B00000010;
   }//end DOWN
 
-  if ((button_handler == 3) && ((flags_holder & 1)== 0))   {                                                                                                         
+  if ((button_handler == 3) && ((flags_holder & 1) == 0))   {
 
     if (screen > 0) {
       screen--;
     }//endnestedif
 
-    //newdisp_needed = 1;                                                                                                                                     
+    //newdisp_needed = 1;
     flags |= B00000010;
   }//end LEFT
 
-  if ((button_handler == 4) && ((flags_holder & 1)== 0)) {                                                                                                       
+  if ((button_handler == 4) && ((flags_holder & 1) == 0)) {
 
     if (screen < 4) { // 01 , 2main menu, 34
       screen++;
     }//endnestedif
     if (screen == 5) {
       if (tests > 0) {
-        //tests_needed = 1;                                                                                                                                
+        //tests_needed = 1;
         flags |= B00000001;
       }//endnestedif
     }//endif unpause
 
-    //newdisp_needed = 1;                                                                                                                                     
+    //newdisp_needed = 1;
     flags |= B00000010;
   }//end RIGHT
 
-  if ((button_handler == 5) && ((flags_holder & 1)== 0)) {                                                                                                    
+  if ((button_handler == 5) && ((flags_holder & 1) == 0)) {
     /*
       //This is a recently added checker used to try and pause while running.
       if (tests_needed == 1) {
@@ -95,16 +95,16 @@ void handle_button(uint8_t button_handler) {
       }//endif select while running
     */
     if ((screen == 0) || (screen == 4)) {
-      //tests_needed = 1;                                                                                                                                     
+      //tests_needed = 1;
       flags |= B00000001;
       // may need to use own seperate display function for running
 
     }//endnestedif
-    //newdisp_needed = 1;                                                                                                                                       
+    //newdisp_needed = 1;
     flags |= B00000010;
   }//end SELECT
 
 
-  //button_flag = 0;                                                                                                                                           
+  //button_flag = 0;
   flags &= B11111011;
 }//end handle_button()

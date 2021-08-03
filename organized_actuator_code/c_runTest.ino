@@ -1,5 +1,8 @@
 void runTest() {
   // Display running menu. Select to pause. Right to run after select. Select again to stop. (menu)
+
+  
+  
   screen = 2;
   Serial.println("runTest called");
   char myStg[10];
@@ -16,8 +19,21 @@ void runTest() {
     lcd.print(myStg[i]);
   }//endfor
 
-  delay(2000);                    // Add in the control here for the relays
+                      // Add in the control here for the relays
+  //noInterrupts();
+  digitalWrite(1,LOW);
+  digitalWrite(2,LOW);
+  digitalWrite(1,HIGH);
+  delay(5000);
+  digitalWrite(1,LOW);
+  delay(1000);
+  digitalWrite(2,HIGH);
+  delay(5000);
+  digitalWrite(2,LOW);
   
+  //duty cycle
+  delay(24000); 
+    
   lcd.clear();
   tests--;
 
@@ -32,5 +48,5 @@ void runTest() {
     flags |= B00000010;
   }//endif
 
-
+  //interrupts();
 }//endrunTest()

@@ -38,14 +38,16 @@ void loop() {
       //Serial.println("Select in loop");
       button_code = 5;
 
+/*
       flags_holder=0;
       flags_holder= (flags >> (1-1));
       if ((flags_holder & 1) == 1) {                                                                                         
       //if tests_needed=1;
         screen = 5;
         //tests_needed = 0;                                                                                               
-        flags &= B11111110;
+        //flags &= B11111110;
       }//end pause
+  */                                                                                    //Auto pause on select
 
     }//end up
   }//endif buttons
@@ -83,7 +85,10 @@ void loop() {
       flags_holder= (flags >> (1-1));
       if ((flags_holder & 1)== 1) {                                                                                                      
         //if tests_needed==1
+        noInterrupts();
         runTest();
+        interrupts();
+        
       }//endif
       break;
 
