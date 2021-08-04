@@ -14,7 +14,7 @@ Projects included:
 
 UNO: This project runs on a 25 ms clock. The uno has an LCD, SD reader, and external protoshield for CAPs, resistors, and needed ICs. 
 
-LEONARDO: This project runs on a 25 ms clock due mainly to i2c time with the LCD screen. Without the screen a 10 ms interrupt is easily achievable. With overclocking the screen or i2c protocol this is also achievable. Writing one's own library like the https://github.com/bitbank2/BitBang_I2C library is obviously possible as well for even more speed optimization. 
+LEONARDO: This project runs on a 25 ms clock due mainly to i2c time with the LCD screen. Without the screen a 10 ms interrupt is easily achievable, but good temperature control is easily possible without it. Overclocking the screen or i2c protocol also allows 10 ms. Writing one's own library like the https://github.com/bitbank2/BitBang_I2C library is obviously possible as well for even more speed optimization if one was using a very strong heater core in a small space with need for fast control. 
 
 ZERO: I used an arduino Zero with Pi-Hole to reroute my DNS in my house and block all ads across our entire wifi network
 
