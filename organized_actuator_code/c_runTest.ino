@@ -4,7 +4,7 @@ void runTest() {
   
   
   screen = 2;
-  Serial.println("runTest called");
+  Serial.println(F("runTest called"));
   char myStg[10];
   itoa(tests, myStg, 10);
   int len = strlen(myStg);
@@ -19,7 +19,33 @@ void runTest() {
     lcd.print(myStg[i]);
   }//endfor
 
-                      // Add in the control here for the relays
+  // Add in the control here for the relays. The entirety of what we write to the SD card could just be a struct 
+  /*
+   *   void runTest(){
+          noInterrupts();
+          PORTD = B00000010; 
+          
+          delay(500); // You can measure pressure in here as often as you'd like.... and it'll really be a while like i type up below
+
+           //While (DigitalPingroundSignalSwitch != LOW){
+              measure pressure;
+              digitalRead(that pin);
+              
+              // may need to wdt_reset(); 
+            }//endwhile
+           // once you hit past it you record the time difference on extension... or can wait till after retract
+
+          
+          PORTD = B00000000; 
+          interrupts(); 
+        }//end runTest
+   * 
+   * 
+   * 
+   * 
+   */
+
+ 
   //noInterrupts();
   digitalWrite(1,LOW);
   digitalWrite(2,LOW);

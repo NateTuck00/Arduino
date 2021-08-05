@@ -9,18 +9,18 @@ void displayLCD() {
   itoa(tests, myStg, 10);
   int len = strlen(myStg);
 
-  Serial.print("tests");
+  Serial.print(F("tests"));
   Serial.println(tests);
 
 
-  Serial.print("screen");
+  Serial.print(F("screen"));
   Serial.println(screen);
 
 
   if (screen == 0) {
     //Left start screen
-    lcd.print("Select:Run ");
-    Serial.print("tests ");
+    lcd.print(F("Select:Run "));
+    Serial.print(F("tests "));
 
     for (int i = 0; i < len; i++) {
       lcd.print(myStg[i]);
@@ -31,13 +31,13 @@ void displayLCD() {
 
   if (screen == 1) {
     //left count /disp
-    lcd.print("L:+5 tests " );
+    lcd.print(F("L:+5 tests "));
 
     for (int i = 0; i < len; i++) {
       lcd.print(myStg[i]);
     }//endfor
 
-    Serial.print("tests ");
+    Serial.print(F("tests "));
     Serial.println(tests);
   }//endif
 
@@ -55,7 +55,7 @@ void displayLCD() {
       lcd.print(myStg[i]);
     }//endfor
 
-    Serial.print("tests ");
+    Serial.print(F("tests "));
     Serial.println(tests);
   }//endif
 
@@ -67,7 +67,7 @@ void displayLCD() {
       lcd.print(myStg[i]);
     }//endfor
 
-    Serial.print("tests ");
+    Serial.print(F("tests "));
     Serial.println(tests);
   }//endif
 

@@ -1,5 +1,10 @@
 #include <SPI.h>
-#include <SD.h >  // These two are for the SD card 
+#include <SD.h >  // These two are for the SD card
+
+//#include <SdFat.h>
+//SdFat SD;
+
+
 
 File myFile;
 

@@ -14,7 +14,7 @@ void datalog(){
   
   // if the file isn't open, pop up an error:
   else {
-    Serial.println("error opening datalog.txt");
+    Serial.println(F("error opening datalog.txt"));
   }//end else
   
 }//end void datalog()
