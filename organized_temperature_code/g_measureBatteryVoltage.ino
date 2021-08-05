@@ -5,7 +5,7 @@
 void measureBatteryVoltage(){
   float sensorVal = analogRead(A1);
   float volt = (sensorVal/1023) * 5;
-  Serial.print("Sensor val: ");
+  Serial.print(F("Sensor val: "));
   Serial.println(sensorVal);
   Serial.println(volt);
 

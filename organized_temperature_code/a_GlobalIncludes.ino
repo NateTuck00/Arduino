@@ -5,7 +5,7 @@
   #include "Temp_PID.h"
   #include "a_dht.h"
     
-  const int RHT03_DATA_PIN = 6;
+  //const int RHT03_DATA_PIN = 6;
   #define DHT22_PIN 6
   dht DHT;
   OLED myOLED(SDA, SCL, 4);//added  the 4 as a redundant reset pin
