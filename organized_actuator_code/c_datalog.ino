@@ -14,7 +14,9 @@ void datalog(){
   
   // if the file isn't open, pop up an error:
   else {
+    #ifdef debug
     Serial.println(F("error opening datalog.txt"));
+    #endif
   }//end else
   
 }//end void datalog()

@@ -40,7 +40,9 @@ ISR(TIMER1_COMPA_vect) {
     cons_selects = 0;
 
     if (cons_ups > 8) {
+      #ifdef debug
       Serial.println(F("Held up long enough"));
+      #endif
       cons_ups = 0;
       //button_flag = 1;                                                                                                                        ///3
       flags |= B00000100;
@@ -57,7 +59,9 @@ ISR(TIMER1_COMPA_vect) {
     cons_selects = 0;
 
     if (cons_downs > 8) {
+      #ifdef debug
       Serial.println(F("Held down long enough"));
+      #endif
       cons_downs = 0;
       //button_flag = 1;                                                                                                                          //3
       flags |= B00000100;
@@ -74,7 +78,9 @@ ISR(TIMER1_COMPA_vect) {
     cons_selects = 0;
 
     if (cons_lefts > 8) {
+      #ifdef debug
       Serial.println(F("Held left long enough"));
+      #endif
       cons_lefts = 0;
       //button_flag = 1;                                                                                                                              ///3
       flags |= B00000100;
@@ -91,7 +97,9 @@ ISR(TIMER1_COMPA_vect) {
     cons_selects = 0;
 
     if (cons_rights > 8) {
+      #ifdef debug
       Serial.println(F("Held right long enough"));
+      #endif
       cons_rights = 0;
       //button_flag = 1;                                                                                                                              ///3
       flags |= B00000100;
@@ -108,7 +116,9 @@ ISR(TIMER1_COMPA_vect) {
     cons_rights = 0;
 
     if (cons_selects > 8) {
+      #ifdef debug
       Serial.println(F("Held select long enough"));
+      #endif
       cons_selects = 0;
       //button_flag = 1;                                                                                                                              ///3
       flags |= B00000100; 

@@ -74,7 +74,9 @@ void loop() {
       flags_holder= (flags >> (2-1));
       if ((flags_holder & 1)== 1) {                                                                                                    
         //if newdisp_needed==1
+        #ifdef debug
         Serial.println(F("If newdisp needed =1"));
+        #endif
         displayLCD();
       }//endif
       break;

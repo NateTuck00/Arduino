@@ -1,7 +1,10 @@
 void displayLCD() {
   //if on left screen count is 1.
   //if on right count is 100;
+  #ifdef debug
   Serial.println("displayLCD called");
+  #endif
+  
   lcd.clear();
   lcd.setCursor(0, 0);
 
@@ -9,24 +12,26 @@ void displayLCD() {
   itoa(tests, myStg, 10);
   int len = strlen(myStg);
 
+  #ifdef debug
   Serial.print(F("tests"));
   Serial.println(tests);
-
-
   Serial.print(F("screen"));
   Serial.println(screen);
-
+  #endif
 
   if (screen == 0) {
     //Left start screen
     lcd.print(F("Select:Run "));
+    #ifdef debug
     Serial.print(F("tests "));
+    #endif
 
     for (int i = 0; i < len; i++) {
       lcd.print(myStg[i]);
     }//endfor
-
+    #ifdef debug
     Serial.println(tests);
+    #endif
   }//endif
 
   if (screen == 1) {
@@ -36,9 +41,10 @@ void displayLCD() {
     for (int i = 0; i < len; i++) {
       lcd.print(myStg[i]);
     }//endfor
-
+    #ifdef debug
     Serial.print(F("tests "));
     Serial.println(tests);
+    #endif
   }//endif
 
   if (screen == 2) {
@@ -54,9 +60,10 @@ void displayLCD() {
     for (int i = 0; i < len; i++) {
       lcd.print(myStg[i]);
     }//endfor
-
+    #ifdef debug
     Serial.print(F("tests "));
     Serial.println(tests);
+    #endif
   }//endif
 
   if (screen == 4) {
@@ -66,9 +73,11 @@ void displayLCD() {
     for (int i = 0; i < len; i++) {
       lcd.print(myStg[i]);
     }//endfor
-
+    
+    #ifdef debug
     Serial.print(F("tests "));
     Serial.println(tests);
+    #endif
   }//endif
 
   if (screen == 5) {

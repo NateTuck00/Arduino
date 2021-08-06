@@ -1,5 +1,7 @@
 void handle_button(uint8_t button_handler) {
+  #ifdef debug
   Serial.println(F("Handle button called"));
+  #endif
   // Add control here for manual control of the actuator. Could be a set time or could be checked for at the start of the interrupt each time and a flag set to tell the ISR that the motor is on
   /*
     if(disaster==1){

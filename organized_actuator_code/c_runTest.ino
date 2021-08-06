@@ -1,10 +1,11 @@
 void runTest() {
   // Display running menu. Select to pause. Right to run after select. Select again to stop. (menu)
-
-  
-  
   screen = 2;
+  
+  #ifdef debug
   Serial.println(F("runTest called"));
+  #endif
+  
   char myStg[10];
   itoa(tests, myStg, 10);
   int len = strlen(myStg);
@@ -63,7 +64,9 @@ void runTest() {
   lcd.clear();
   tests--;
 
+  #ifdef debug
   Serial.println(tests);
+  #endif
 
   if (tests < 1) {
     tests = 1;
