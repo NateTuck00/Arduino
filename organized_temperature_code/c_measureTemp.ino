@@ -5,23 +5,35 @@ float measureTemp(){
   switch (chk)
   {
     case DHTLIB_OK:  
+    #ifdef debug
     Serial.println(F("Ping"));//all good
+    #endif
+    
     g_read_flag = 1;
     g_sensorfail = 0;
     break;
     
     case DHTLIB_ERROR_CHECKSUM: 
+    #ifdef debug
     Serial.print(F("Checksum error,\t")); 
+    #endif
+    
     g_read_flag = 0;
     break;
     
     case DHTLIB_ERROR_TIMEOUT: 
+    #ifdef debug
     Serial.print(F("Time out error,\t")); 
+    #endif
+    
     g_read_flag = 0;
     break;
     
     default: 
+    #ifdef debug
     Serial.print(F("Unknown error,\t"));
+    #endif
+    
     g_read_flag = 0;
     break;
   }

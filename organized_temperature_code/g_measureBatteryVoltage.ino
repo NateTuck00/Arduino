@@ -5,9 +5,12 @@
 void measureBatteryVoltage(){
   float sensorVal = analogRead(A1);
   float volt = (sensorVal/1023) * 5;
+
+  #ifdef debug
   Serial.print(F("Sensor val: "));
   Serial.println(sensorVal);
   Serial.println(volt);
+  #endif
 
   if (volt < 2.48){           // if we're really below 12 volts
     g_voltage_warning++;

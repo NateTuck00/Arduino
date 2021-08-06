@@ -1,6 +1,7 @@
 void setup() {
+  #ifdef debug
   Serial.begin(115200);
-  
+  #endif
   
   //display reset
   delay(1000);
