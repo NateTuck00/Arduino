@@ -1,59 +1,59 @@
 void setup() {
   // put your setup code here, to run once:
-  #ifdef debug
+#ifdef debug
   Serial.begin(115200);
-  
+
   while (!Serial) {
     ;
   }//endwhile
-  #endif
+#endif
 
   lcd.begin(16, 2);
   lcd.setBacklight(VIOLET);
 
   if (!SD.begin(9)) {
-    #ifdef debug
+#ifdef debug
     Serial.println(F("SD Initialization failed!"));
-    #endif
-    
+#endif
+
     lcd.clear();
     lcd.print("Initialization failed");
     lcd.setBacklight(RED);
     while (1);
   }//endif
-  #ifdef debug
+#ifdef debug
   Serial.println (F("SD Initialization done."));
-  #endif
-  
+#endif
+
   myFile = SD.open ("test.txt", FILE_WRITE);//Open the file. Note that you can only open one file at a time. You must close this one before opening the next.
 
 
   if (myFile) { //if the file has opened correctly
-    #ifdef debug
+#ifdef debug
     Serial.println(F("Writing to test.txt..."));
-    #endif
-    
+#endif
+
     myFile.println("testing 1, 2, 3.");         // This writes into the actual file
     myFile.close();
-    #ifdef debug
+#ifdef debug
     Serial.println(F("Done writing to file."));
-    #endif
+#endif
   }//endif
 
-  
+
   else {
-    #ifdef debug
+#ifdef debug
     Serial.println(F("Error opening test.txt"));
-    #endif
+#endif
   }//endelse
 
   myFile = SD.open("test.txt");
 
-  if (myFile){
-    #ifdef debug
+  if (myFile) {
+#ifdef debug
     Serial.println(F("test.txt:"));
-    #endif
-    
+#endif
+
     while (myFile.available()) {
       Serial.write(myFile.read());          // Read out the file
     }//endwhile more left in file to read
@@ -61,10 +61,10 @@ void setup() {
     myFile.close();
   }//end if file opens correctly
   else {
-    #ifdef debug
+#ifdef debug
     Serial.println(F("Error opening test.txt"));
-    #endif
-    
+#endif
+
     lcd.setBacklight(RED);
   }//endelse file failed to open.
 
@@ -82,13 +82,13 @@ void setup() {
   TIMSK1 |= (1 << OCIE1A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
-  #ifdef debug
+#ifdef debug
   Serial.println(F("Setup Complete"));
-  #endif
-  
+#endif
+
   lcd.print("Left+5 Right+100");
   pinMode(1, OUTPUT);
   pinMode(2, OUTPUT);
-  digitalWrite(1,LOW);
-  digitalWrite(2,LOW);
+  digitalWrite(1, LOW);
+  digitalWrite(2, LOW);
 }//endvoid setup
