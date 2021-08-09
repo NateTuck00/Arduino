@@ -48,6 +48,8 @@ void runTest() {
 
  
   //noInterrupts();
+
+  /*
   digitalWrite(1,LOW);
   digitalWrite(2,LOW);
   digitalWrite(1,HIGH);
@@ -60,7 +62,8 @@ void runTest() {
   
   //duty cycle
   delay(24000); 
-    
+    */
+  delay(2000);
   lcd.clear();
   tests--;
 
