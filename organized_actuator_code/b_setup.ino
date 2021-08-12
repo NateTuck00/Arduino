@@ -72,6 +72,10 @@ void setup() {
   ///////////////////////////////////////////
   //Timer Section. Editing is very dangerous.
   ///////////////////////////////////////////
+  //WDTCSR |= (1 << WDCE)|(1 << WDE);
+  //WDTCSR  = (1 << WDIE)|(1 << WDE)|(1 << WDP3)|(0 << WDP2)|(0 << WDP1)|(1 <<WDP0);   //1001 = 8 seconds 
+  
+  
   TCCR1A = 0;                               // set entire TCCR1A register to 0
   TCCR1B = 0;                               // same for TCCR1B
   TCNT1  = 0;                               //initialize counter value to 0
@@ -86,9 +90,10 @@ void setup() {
   Serial.println(F("Setup Complete"));
 #endif
 
+
   lcd.print("Left+5 Right+100");
-  pinMode(1, OUTPUT);
+  pinMode(3, OUTPUT);
   pinMode(2, OUTPUT);
-  digitalWrite(1, LOW);
+  digitalWrite(3, LOW);
   digitalWrite(2, LOW);
 }//endvoid setup

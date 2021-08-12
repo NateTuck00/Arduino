@@ -1,5 +1,7 @@
 void loop() {
   // put your main code here, to run repeatedly:
+  //wdt_reset();
+
   uint8_t buttons = lcd.readButtons();
 
   /*
@@ -40,14 +42,14 @@ void loop() {
 
 
       flags_holder = 0;
-      flags_holder = (flags >> (1-1));
-      if ((flags_holder & 1) == 1) {                                                                                         
-      //if tests_needed=1;
+      flags_holder = (flags >> (1 - 1));
+      if ((flags_holder & 1) == 1) {
+        //if tests_needed=1;
         screen = 5;
-        //tests_needed = 0;                                                                                               
-        flags &= B11111110;     // this one was commented out but should it be? 
+        //tests_needed = 0;
+        flags &= B11111110;     // this one was commented out but should it be?
       }//end pause
-                                                                                      //Auto pause on select
+      //Auto pause on select
 
     }//end up
   }//endif buttons
@@ -58,48 +60,55 @@ void loop() {
   }//endif !buttons
 
   switch (itr) {
+    
     case 1:
+    
       flags_holder = 0;
-      flags_holder = (flags >> (3-1));
-      if ((flags_holder & 1) == 1) {                                                                                            
+      flags_holder = (flags >> (3 - 1));
+      if ((flags_holder & 1) == 1) {
         //if button_flag==1
         handle_button(button_code);  // functions reset their flags at the end
 
       }//endif
       break;
 
+
     case 2:
 
       flags_holder = 0;
-      flags_holder= (flags >> (2-1));
-      if ((flags_holder & 1)== 1) {                                                                                                    
+      flags_holder = (flags >> (2 - 1));
+      if ((flags_holder & 1) == 1) {
         //if newdisp_needed==1
-        #ifdef debug
+#ifdef debug
         Serial.println(F("If newdisp needed =1"));
-        #endif
+#endif
         displayLCD();
       }//endif
       break;
 
+
     case 3:
 
       flags_holder = 0;
-      flags_holder= (flags >> (1-1));
-      if ((flags_holder & 1)== 1) {                                                                                                      
+      flags_holder = (flags >> (1 - 1));
+      if ((flags_holder & 1) == 1) {
         //if tests_needed==1
-        //noInterrupts();
+        
         runTest();
-        //interrupts();
         
       }//endif
       break;
 
+
     case 4:
+    
       flags_holder = 0;
-      flags_holder= (flags >> (4-1));
-      if ((flags_holder & 1) == 1) {                                                                                                    
-         //manual_control_needed
+      flags_holder = (flags >> (4 - 1));
+      if ((flags_holder & 1) == 1) {
+        //manual_control_needed ( pressure dropoff, actuator time too long) (just stop for overcurrent?)
         // don't reset this flag. new display and controls.
+
+        
       }//endif
       break;
 

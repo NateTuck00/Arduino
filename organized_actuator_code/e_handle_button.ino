@@ -1,4 +1,4 @@
-void handle_button(uint8_t button_handler) {
+ void handle_button(uint8_t button_handler) {
   #ifdef debug
   Serial.println(F("Handle button called"));
   #endif

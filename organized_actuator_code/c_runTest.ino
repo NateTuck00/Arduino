@@ -40,31 +40,28 @@ void runTest() {
           PORTD = B00000000; 
           interrupts(); 
         }//end runTest
-   * 
-   * 
-   * 
-   * 
    */
-
- 
-  //noInterrupts();
-
-  /*
-  digitalWrite(1,LOW);
-  digitalWrite(2,LOW);
-  digitalWrite(1,HIGH);
-  delay(5000);
-  digitalWrite(1,LOW);
-  delay(1000);
+   
+  delay(2000);
+  digitalWrite(3,LOW);
   digitalWrite(2,HIGH);
-  delay(5000);
+  lcd.clear();
+  lcd.print("Extending");
+
+  delay(10000);
   digitalWrite(2,LOW);
   
-  //duty cycle
-  delay(24000); 
-    */
+  lcd.clear();
+  lcd.print("Retracting");
+  digitalWrite(3,HIGH);
+  delay(10000);
+  digitalWrite(3,LOW);
+  
+  lcd.clear();
+  lcd.print("Waiting...");      //dataloggging? or we can split wait in half and double log
   delay(2000);
   lcd.clear();
+  
   tests--;
 
   #ifdef debug
@@ -80,5 +77,4 @@ void runTest() {
     flags |= B00000010;
   }//endif
 
-  //interrupts();
 }//endrunTest()
