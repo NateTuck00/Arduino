@@ -3,8 +3,8 @@
 //The code is mainly separated to improve the State Machine's legibility
 
 void checkTempBounds(){
-    float dif;
-    float sum;
+    static float dif;
+    static float sum;
     
   if((g_f_latestTempF==0.0)||(g_f_latestTempF==32.00)){ //if errorcode temp
        sum=0;

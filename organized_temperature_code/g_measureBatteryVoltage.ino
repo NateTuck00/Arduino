@@ -1,22 +1,25 @@
 
 //
-//  (10k/(10k+39k))* Input Voltage 
+//  (10k/(10k+39k))* Input Voltage = Voltage offboard
 
 void measureBatteryVoltage(){
-  float sensorVal = analogRead(A1);
-  float volt = (sensorVal/1023) * 5;
+  static float sensorVal = analogRead(A1);
+  static float volt_onboard = (sensorVal/1023) * 5; //This is a digital to analog conversion to find the volts /5 on the pin.
+
+  #define UnderVolt 2.48 
+  #define OverVolt 3.3
 
   #ifdef debug
   Serial.print(F("Sensor val: "));
   Serial.println(sensorVal);
-  Serial.println(volt);
+  Serial.println(volt_onboard);
   #endif
 
-  if (volt < 2.48){           // if we're really below 12 volts
+  if (volt_onboard < UnderVolt){           // 2.48 volts on pin =< 12 volts off pin before voltage divider  (Volt * (10K/49k))< 12 
     g_voltage_warning++;
   }//endif
 
-  else if (volt > 3.3){      // if we're really above 16 volts 
+  else if (volt_onboard > OverVolt){      // if we're really above 16 volts offboard 
     g_voltage_warning++;
   }//endif
 

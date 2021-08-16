@@ -8,8 +8,8 @@
 #include "Temp_PID.h"
 
 double tempPID::computePID(tempPID tp) {
-  double currentTime = millis();
-  double elapsedTime = (double)(currentTime - tp.dbl_previousTime);
+  static double currentTime = millis();
+  static double elapsedTime = (double)(currentTime - tp.dbl_previousTime);
 
 
   double error = dbl_setPoint - dbl_temp_inp; // error here means how far off our temp_input temp is from where the gauge is set

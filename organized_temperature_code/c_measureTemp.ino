@@ -1,7 +1,7 @@
 //measureTemp: simple quick return of the temp in F. Can add humidity with some changes in return or a global
 float measureTemp(){
 
-  int chk = DHT.read22(DHT22_PIN);
+  static int chk = DHT.read22(DHT22_PIN);
   switch (chk)
   {
     case DHTLIB_OK:  
