@@ -1,6 +1,6 @@
 #include <SPI.h>
 #include <SD.h >  // These two are for the SD card
-#include <avr/wdt.h> //watchdog timer
+//#include <avr/wdt.h> //watchdog timer
 
 File myFile;
 
@@ -10,7 +10,7 @@ File myFile;
 
 Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();// This should connect to analog 4&5 and prevent you from reading from those.
 
-#define debug 1 //uncomment this line to print serial, comment for some slight memory and runtime savings
+//#define debug 1 //uncomment this line to print serial, comment for some slight memory and runtime savings
 
 #define RED 0x1
 #define YELLOW 0x3

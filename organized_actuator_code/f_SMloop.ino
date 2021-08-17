@@ -68,7 +68,7 @@ void loop() {
       if ((flags_holder & 1) == 1) {
         //if button_flag==1
         handle_button(button_code);  // functions reset their flags at the end
-
+        
       }//endif
       break;
 
@@ -79,9 +79,9 @@ void loop() {
       flags_holder = (flags >> (2 - 1));
       if ((flags_holder & 1) == 1) {
         //if newdisp_needed==1
-#ifdef debug
+        #ifdef debug
         Serial.println(F("If newdisp needed =1"));
-#endif
+        #endif
         displayLCD();
       }//endif
       break;

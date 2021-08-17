@@ -1,7 +1,9 @@
 void runTest() {
   // Display running menu. Select to pause. Right to run after select. Select again to stop. (menu)
   screen = 2;
-  
+  String dataString = "Pressure Extension: ";
+  int numMeasurements = 0;
+
   #ifdef debug
   Serial.println(F("runTest called"));
   #endif
@@ -20,46 +22,174 @@ void runTest() {
     lcd.print(myStg[i]);
   }//endfor
 
-  // Add in the control here for the relays. The entirety of what we write to the SD card could just be a struct 
-  /*
-   *   void runTest(){
-          noInterrupts();
-          PORTD = B00000010; 
-          
-          delay(500); // You can measure pressure in here as often as you'd like.... and it'll really be a while like i type up below
 
-           //While (DigitalPingroundSignalSwitch != LOW){
-              measure pressure;
-              digitalRead(that pin);
-              
-              // may need to wdt_reset(); 
-            }//endwhile
-           // once you hit past it you record the time difference on extension... or can wait till after retract
+  delay(3000);
+  //wdt_reset();
 
-          
-          PORTD = B00000000; 
-          interrupts(); 
-        }//end runTest
-   */
-   
-  delay(2000);
-  digitalWrite(3,LOW);
-  digitalWrite(2,HIGH);
   lcd.clear();
   lcd.print("Extending");
 
-  delay(10000);
+  digitalWrite(3,LOW);
+  digitalWrite(2,HIGH);
+  int firstTime = millis();
+  int lastTime = firstTime;
+  int recentTime;
+
+  
+  while (digitalRead(8) != HIGH){  // Add in a 3 second timeout
+    //delay(10);
+    digitalRead(8);
+
+
+    recentTime = millis();
+/*
+    if(((recentTime - lastTime) >= 100)&&(numMeasurements < 20 )){
+      float sensorValue = analogRead(A2);
+      #ifdef debug
+      Serial.println(sensorValue);
+      #endif
+      float pressure = (sensorValue / 1023) * 3000.0;
+      dataString += String(pressure);
+      numMeasurements ++;
+      lastTime = recentTime;
+    }
+
+    */
+    digitalRead(8);
+
+/*
+    uint8_t buttons = lcd.readButtons();//This is the "Emergency" pause while you're extended. If you hit it here I probably want to have manual control option
+    if (buttons) {
+      if (buttons & BUTTON_SELECT) {
+        button_code = 1;
+        
+        
+      }//end nested Select only if
+    }//endif
+  */
+    
+  }//end extend
   digitalWrite(2,LOW);
+  //wdt_reset();
+  /*
+  if (numMeasurements < 20){
+    for(int i= numMeasurements; i < 20; i++){     // this can all likely be replaced with a float pressure = measurepressure call below. 
+      float sensorValue = analogRead(A2);
+      #ifdef debug
+      Serial.println(sensorValue);
+      #endif
+      float pressure = (sensorValue / 1023) * 3000.0;
+      dataString += String(pressure);
+      
+    }//endnested for
+  }//endif
+*/
+/*
+  noInterrupts();
+  
+  myFile = SD.open("test.txt", FILE_WRITE);
+
+  if (myFile) {
+    myFile.println(dataString);
+    myFile.close();
+    
+    #ifdef debug
+    Serial.println(dataString);
+    #endif
+  }//endif
+  // if the file isn't open, pop up an error:
+  else {
+    #ifdef debug
+    Serial.println(F("error opening datalog.txt"));
+    #endif
+  }//end else
+
+  interrupts(); 
+  //
+  */
+  
+  dataString = "Pressure Retraction: ";
+  
+  lcd.clear();
+  lcd.print("Waiting...");    
+
+  delay(5000);
+  //wdt_reset();// do a while buttoncheck here 
+  delay(5000);
   
   lcd.clear();
   lcd.print("Retracting");
   digitalWrite(3,HIGH);
-  delay(10000);
+
+
+  firstTime = millis();
+  lastTime = firstTime;
+  while (digitalRead(7) != HIGH){
+    
+    digitalRead(7);
+    recentTime = millis();
+
+/*
+    if(((recentTime - lastTime) >= 100)&&(numMeasurements < 20 )){
+      float sensorValue2 = analogRead(A2);
+      #ifdef debug
+      Serial.println(sensorValue2);
+      #endif
+      float pressure2 = (sensorValue2 / 1023) * 3000.0;
+      dataString += String(pressure2);
+      numMeasurements ++;
+      lastTime = recentTime;
+    }//endif
+  */
+    
+    digitalRead(7);
+  }//endwhile
   digitalWrite(3,LOW);
+  //wdt_reset();
+
+/*
+  if (numMeasurements < 20){
+    for(int i= numMeasurements; i < 20; i++){     // this can all likely be replaced with a float pressure = measurepressure call below. 
+      float sensorValue = analogRead(A2);
+      
+      #ifdef debug
+      Serial.println(sensorValue);
+      #endif
+      
+      float pressure = (sensorValue / 1023) * 3000.0;
+      dataString += String(pressure);
+    }//endnested for
+  }//endif
+  
+  //datalog
+  
+  myFile = SD.open("test.txt", FILE_WRITE);
+
+  if (myFile) {
+    myFile.println(dataString);
+    myFile.close();
+    
+    #ifdef debug
+    Serial.println(dataString);
+    #endif
+  }//endif
+  // if the file isn't open, pop up an error:
+  else {
+    #ifdef debug
+    Serial.println(F("error opening datalog.txt"));
+    #endif
+  }//end else
+  //
+  dataString = "";
+  */
   
   lcd.clear();
-  lcd.print("Waiting...");      //dataloggging? or we can split wait in half and double log
-  delay(2000);
+  lcd.print("Hold Sel 2 pause");     
+  
+  delay(5000);
+  //wdt_reset();  //while buttoncheck 
+  delay(5000);
+  
   lcd.clear();
   
   tests--;
