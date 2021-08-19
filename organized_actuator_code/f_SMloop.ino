@@ -93,8 +93,8 @@ void loop() {
       flags_holder = (flags >> (1 - 1));
       if ((flags_holder & 1) == 1) {
         //if tests_needed==1
-        
-        runTest();
+        //test_prelogic(); // here we do the same look at the flags as we do in runtest
+        //runTest();
         
       }//endif
       break;
@@ -107,11 +107,33 @@ void loop() {
       if ((flags_holder & 1) == 1) {
         //manual_control_needed ( pressure dropoff, actuator time too long) (just stop for overcurrent?)
         // don't reset this flag. new display and controls.
-
+        //for(int i=0; i < 600; i++){
+        //  NOP; //(this will be done in the ISR and not in this code to insure the reliability of the timing); 
+        //}
         
       }//endif
       break;
 
+      case 5:// this should be extend 
+      //if (extend == 1){
+      //  extend();// this should really just be two digitalWrites, an extension counter (600) started to measure 3 seconds in ISR with flag 
+      //  started to measure pressure every 20 times in ISR 
+      //}
+
+      break;
+
+      case 6: // duty cycle wait has happened in ISR and once hit end we log 
+      //datalog();// the ISR will have a global allocation of the string and update it before resetting it. 
+      // we need a copy of that variable for extend and retract so we can't overwrite each other. 
+      //once done logging AND with the minimum wait   
+      break;
+
+      case 7: // this should be retract once the data log func sets the flag that it's done. 
+      //retract();// just two digitalWrites and then the same 3 second timeout is activated. 
+      // we also set the retraction flag for the ISR to handle the button press 
+      // we set the datalog flag in the ISR once we hit the micros. 
+      break; 
+    
     default:;       //Nada
 
   }//endswitch

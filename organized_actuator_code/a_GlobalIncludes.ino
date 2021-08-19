@@ -20,6 +20,8 @@ Adafruit_RGBLCDShield lcd = Adafruit_RGBLCDShield();// This should connect to an
 #define VIOLET 0x5
 #define WHITE 0x7
 
+#define NOP __asm__ __volatile__ ("nop\n\t")
+
 uint16_t tests = 1; // if on right screen up by 100 start on 100. left=1 go up by 5
 uint8_t screen = 2; // Use left and right as iterator for screen if not running
 //uint8_t pressure;//eventually if can't return it as function or flag high or low
@@ -29,3 +31,5 @@ uint8_t flags_holder = 0;
 
 uint8_t button_code = 0;
 uint8_t itr = 0;
+
+volatile uint8_t small_isr_counter = 0; 

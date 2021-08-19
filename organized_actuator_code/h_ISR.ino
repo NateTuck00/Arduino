@@ -4,9 +4,7 @@ uint8_t cons_lefts = 0;
 uint8_t cons_rights = 0;
 uint8_t cons_selects = 0;
 
-ISR(TIMER1_COMPA_vect) {
-  //Serial.println("ISR ");
-  //read_button();//Sets the button_code variable
+void interrupt25() {
 
   /*
     if(manual_motor_on == 1){

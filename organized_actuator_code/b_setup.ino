@@ -1,13 +1,13 @@
 void setup() {
   // put your setup code here, to run once:
     //pinMode(4, INPUT);
-#ifdef debug
-  Serial.begin(115200);
+//#ifdef debug
+  Serial.begin(9600);
 
   while (!Serial) {
     ;
   }//endwhile
-#endif
+//#endif
 
   lcd.begin(16, 2);
   lcd.setBacklight(VIOLET);
