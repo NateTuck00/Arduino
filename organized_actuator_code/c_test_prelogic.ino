@@ -10,7 +10,7 @@ void test_prelogic(){
   int numMeasurements = 0;
 
   #ifdef debug
-  Serial.println(F("runTest called"));
+  Serial.println(F("test prelogic called"));
   #endif
   
   char myStg[10];

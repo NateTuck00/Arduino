@@ -93,7 +93,7 @@ void loop() {
       flags_holder = (flags >> (1 - 1));
       if ((flags_holder & 1) == 1) {
         //if tests_needed==1
-        //test_prelogic(); // here we do the same look at the flags as we do in runtest
+        test_prelogic(); // here we do the same look at the flags as we do in runtest
         //runTest();
         
       }//endif

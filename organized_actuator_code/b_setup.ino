@@ -35,7 +35,7 @@ void setup() {
     Serial.println(F("Writing to test.txt..."));
 #endif
 
-    myFile.println("testing 1, 2, 3.");         // This writes into the actual file
+    myFile.println("test,current,pressure");         // This writes into the actual file
     myFile.close();
 #ifdef debug
     Serial.println(F("Done writing to file."));

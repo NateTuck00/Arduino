@@ -8,7 +8,11 @@ uint8_t cons_selects = 0;
 //
 //
 void interrupt25() {
-
+  
+  //#ifdef debug
+  //Serial.print(F("25ms func called. Itr/8:  "));
+  //Serial.println(itr); 
+  //#endif
   /*
     if(manual_motor_on == 1){
       // can add an && above with specific iterator to adjust the length of manual control. Want to test with pressure sensor on 5v to see where to call disaster as well as to test length of pull (although only 2" variance)
@@ -34,12 +38,25 @@ void interrupt25() {
 
    if(extending == true){
     //measure pressure and overcurrent and add it to the dataString
-    pressure = measurePressure(); 
+    pressure = measurePressure();   
+    dataString += "Test:";
+    dataString.concat(tests);
+    measureCurrent();
+    dataString += "Pressure:";
+    String concaterator = String(pressure,1);
+    dataString.concat(concaterator);
+    extend();                                               
     
    }//endif extending 
 
    if(retracting == true){
-    pressure =  measurePressure(); 
+    pressure =  measurePressure();  
+    dataString.concat(tests);
+    dataString += ",";                                                       
+    measureCurrent();
+    String concaterator = String(pressure,1);
+    dataString.concat(concaterator);
+    retract();
    }//endif retracting
    
 
@@ -49,7 +66,12 @@ if(three_sec_timer_on == true){
   if(three_sec_timer >= 120){
     digitalWrite(2,LOW);
     digitalWrite(3,LOW);
-    
+    three_sec_timer_on = false;
+    three_sec_timer = 0;
+    extending = false;
+    retracting = false; 
+    ten_sec_timer_on = true;      // this timer has to be 10 seconds.
+    datalog_time = true;  
   }//endif
   
 }//end 3sec timer
@@ -80,9 +102,10 @@ if(ten_sec_timer_on == true){
     
       }//endif just finished retracting.
 
-      if(digitalRead(8) == HIGH){
+      if(digitalRead(8) == HIGH){                                                                                     // This is where the code hangs and doesn't properly reset itself
+        retracting = true;
         
-      }
+      }//end if just finished extending and waiting
       
       ten_sec_timer_on = false;
       ten_sec_timer = 0;

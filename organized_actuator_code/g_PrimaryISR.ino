@@ -20,6 +20,10 @@ if(retracting == true){
 
 if(extending == true){
   three_sec_timer_on = true;       // this could be an overwrite of this variable and unneeded. 
+  #ifdef debug
+  Serial.print(F("3 sec timer (/120): "));
+  Serial.println(three_sec_timer);
+  #endif
     
    if(digitalRead(8) == HIGH){
       digitalWrite(2,LOW);

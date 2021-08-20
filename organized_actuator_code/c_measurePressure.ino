@@ -10,10 +10,7 @@ float measurePressure(){
   #define RANGE 818
   #define OFFSET 102
   float sensorValue = analogRead(A2);   // /1023
-
-  #ifdef debug
-  Serial.println(sensorValue);
-  #endif
+  
   
   float pressure = ((sensorValue -OFFSET)/RANGE) * MAXPRESSURE; // Our PSI sensor has a .5V offset on both ends of the voltage range, and we adjust the 1023 analog scale accordingly 
   if (pressure > MAXPRESSURE){
@@ -23,6 +20,12 @@ float measurePressure(){
   if (pressure < 0){
     pressure = 0; 
   }//endif
+
+  #ifdef debug
+  Serial.print(F("measure Pressure called."));
+  Serial.println(pressure);
+  #endif
+  
   
   return pressure;
 }//end measurePressure
