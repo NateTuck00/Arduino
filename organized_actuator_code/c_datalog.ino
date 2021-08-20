@@ -21,5 +21,7 @@ void datalog(String dataString){
     Serial.println(F("error opening datalog.txt"));
     #endif
   }//end else
+
+  datalog_time = false;
   
 }//end void datalog()

@@ -31,7 +31,7 @@
   */
   flags_holder = 0;
   flags_holder = (flags >> (5 - 1));
-  if ((button_handler == 1) && ((flags_holder & 1) == 0 )) {
+  if ((button_handler == 1) && ((flags_holder & 1) == 0 )) {      //Up
 
     if ((screen == 0) || (screen == 1)) {
       tests = tests + 5;
@@ -44,7 +44,7 @@
     flags |= B00000010;
   }//end UP
 
-  if ((button_handler == 2) && ((flags_holder & 1) == 0) ) {
+  if ((button_handler == 2) && ((flags_holder & 1) == 0) ) {      //Down
 
     if ((screen == 0) || (screen == 1)) {
       if (tests > 5) {
@@ -62,7 +62,7 @@
     flags |= B00000010;
   }//end DOWN
 
-  if ((button_handler == 3) && ((flags_holder & 1) == 0))   {
+  if ((button_handler == 3) && ((flags_holder & 1) == 0))   {     //Left
 
     if (screen > 0) {
       screen--;
@@ -72,13 +72,21 @@
     flags |= B00000010;
   }//end LEFT
 
-  if ((button_handler == 4) && ((flags_holder & 1) == 0)) {
+  if ((button_handler == 4) && ((flags_holder & 1) == 0)) {       //Right
 
     if (screen < 4) { // 01 , 2main menu, 34
       screen++;
     }//endnestedif
     if (screen == 5) {
       if (tests > 0) {
+        #ifdef debug
+        Serial.println(F("Hits the unpause case and sets tests_needed flag"));
+        #endif
+        
+        if(digitalRead(8) != HIGH){
+          extending = true; 
+        }
+        
         //tests_needed = 1;
         flags |= B00000001;
       }//endnestedif
@@ -88,7 +96,7 @@
     flags |= B00000010;
   }//end RIGHT
 
-  if ((button_handler == 5) && ((flags_holder & 1) == 0)) {
+  if ((button_handler == 5) && ((flags_holder & 1) == 0)) {       //Select 
     /*
       //This is a recently added checker used to try and pause while running.
       if (tests_needed == 1) {

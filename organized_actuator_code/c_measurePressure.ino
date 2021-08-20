@@ -1,6 +1,6 @@
 //
 // We want to measure the pressure as we go in and see where it hits. 
-//
+// It on average for me tops out at about 670 PSI. 
 //
 
 float measurePressure(){

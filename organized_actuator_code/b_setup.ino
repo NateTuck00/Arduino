@@ -71,21 +71,29 @@ void setup() {
   }//endelse file failed to open.
 
 
+
+#ifdef debug
+    Serial.println(F("Timers turning on."));
+#endif
   ///////////////////////////////////////////
   //Timer Section. Editing is very dangerous.
   ///////////////////////////////////////////
   //WDTCSR |= (1 << WDCE)|(1 << WDE);
   //WDTCSR  = (1 << WDIE)|(1 << WDE)|(1 << WDP3)|(0 << WDP2)|(0 << WDP1)|(1 <<WDP0);   //1001 = 8 seconds 
   
+  TCCR0A = 0;// set entire TCCR0A register to 0
+  TCCR0B = 0;// same for TCCR0B
+  TCNT0  = 0;//initialize counter value to 0
+  // set compare match register for 2khz increments
   
-  TCCR1A = 0;                               // set entire TCCR1A register to 0
-  TCCR1B = 0;                               // same for TCCR1B
-  TCNT1  = 0;                               //initialize counter value to 0
+  OCR0A = 78;// = (16*10^6) / (2000*64) - 1 (must be <256)
+  // turn on CTC mode
+  TCCR0A |= (1 << WGM01);
+  // Set CS01 and CS00 bits for 64 prescaler
+  TCCR0B |= (1 << CS02) | (1 << CS00);   
+  // enable timer compare interrupt
+  TIMSK0 |= (1 << OCIE0A);
 
-  OCR1A = 6249;                             // = (16*10^6) / (hz*prescaler) - 1 (must be <65536)    6249= 25ms
-  TCCR1B |= (1 << WGM12);                   // turn on CTC mode
-  TCCR1B |= (1 << CS11) | (1 << CS10);      // Set CS11 and 10 for 64 prescaler
-  TIMSK1 |= (1 << OCIE1A);                  // enable timer compare interrupt
   /////////////////////////////////////////
 
 #ifdef debug

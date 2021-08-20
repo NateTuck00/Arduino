@@ -115,22 +115,26 @@ void loop() {
       break;
 
       case 5:// this should be extend 
-      //if (extend == 1){
-      //  extend();// this should really just be two digitalWrites, an extension counter (600) started to measure 3 seconds in ISR with flag 
-      //  started to measure pressure every 20 times in ISR 
-      //}
+      if (extending == true){
+        extend();// this should really just be two digitalWrites, an extension counter (600) started to measure 3 seconds in ISR with flag 
+        //  start to measure pressure in ISR 
+      }//endif
 
       break;
 
       case 6: // duty cycle wait has happened in ISR and once hit end we log 
-      //datalog();// the ISR will have a global allocation of the string and update it before resetting it. 
+      if(datalog_time == true){
+        datalog(dataString);// the ISR will have a global allocation of the string and update it before resetting it. 
+      }//endif
+      
       // we need a copy of that variable for extend and retract so we can't overwrite each other. 
       //once done logging AND with the minimum wait   
       break;
 
       case 7: // this should be retract once the data log func sets the flag that it's done. 
-      //retract();// just two digitalWrites and then the same 3 second timeout is activated. 
-      // we also set the retraction flag for the ISR to handle the button press 
+      if (retracting == true){
+        retract();// just two digitalWrites and then the same 3 second timeout is activated. 
+      }//endif
       // we set the datalog flag in the ISR once we hit the micros. 
       break; 
     

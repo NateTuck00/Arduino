@@ -4,6 +4,9 @@ uint8_t cons_lefts = 0;
 uint8_t cons_rights = 0;
 uint8_t cons_selects = 0;
 
+//This 25 ms isr Handles button debouncing, should handle 3 second timeouts on extension, and should handle waiting 
+//
+//
 void interrupt25() {
 
   /*
@@ -29,7 +32,66 @@ void interrupt25() {
    * 
    */
 
+   if(extending == true){
+    //measure pressure and overcurrent and add it to the dataString
+    pressure = measurePressure(); 
+    
+   }//endif extending 
 
+   if(retracting == true){
+    pressure =  measurePressure(); 
+   }//endif retracting
+   
+
+// 120*25ms = 3 seconds. Should never hit
+if(three_sec_timer_on == true){
+  three_sec_timer++;
+  if(three_sec_timer >= 120){
+    digitalWrite(2,LOW);
+    digitalWrite(3,LOW);
+    
+  }//endif
+  
+}//end 3sec timer
+
+
+//400*25ms = 10 seconds. Should ALWAYS hit. 
+if(ten_sec_timer_on == true){
+  ten_sec_timer++;
+  
+  if(ten_sec_timer >= 400){
+  
+      if(digitalRead(7) == HIGH){
+        // we still need to run the pre test logic...
+        tests--;
+
+        #ifdef debug
+        Serial.println(tests);
+        #endif
+
+        if (tests < 1) {
+          tests = 1;
+          //tests_needed = 0;                                                                                                                                                                      
+          flags &= B11111110;
+          screen = 2;
+          //newdisp_needed = 1;                                                                                                                                                                    
+          flags |= B00000010;
+        }//endif
+    
+      }//endif just finished retracting.
+
+      if(digitalRead(8) == HIGH){
+        
+      }
+      
+      ten_sec_timer_on = false;
+      ten_sec_timer = 0;
+  }//endif
+  
+}//end 10 sec timer 
+
+
+//Button debouncing code below//
   if (button_code == 1) {
     cons_ups++;
     //0 out the other ones
@@ -137,7 +199,7 @@ void interrupt25() {
 
 
   itr++;
-  if (itr == 5) {
+  if (itr == 8) {
     itr = 0;
   }//endif
 }//end ISR
