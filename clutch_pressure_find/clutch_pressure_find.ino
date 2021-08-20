@@ -18,8 +18,13 @@ File myFile;
 #define MAXPRESSURE 1600.0
 float sensorValue = 0;
 float pressure = 0;
-float vals [100];
+float vals [50];
+int currents[30];
+int currValue = 0;
+int volts = 0;
 int i = 0;
+int m = 3; 
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -52,14 +57,31 @@ void setup() {
   }//endif
   delay(2000); 
 
+  currents[0] = analogRead(A3);
+  delay(10);
+  currents[1] = analogRead(A3);
+  delay(10);
+  currents[2] = analogRead(A3);
+
+  
   digitalWrite(2, HIGH); 
   while (digitalRead(8) != HIGH){
     digitalRead(8);
     delay(20);
     sensorValue = analogRead(A2);
     pressure= ((sensorValue - 102)/818) * MAXPRESSURE; 
-    //pressure = (sensorValue/1023) * MAXPRESSURE; 
-    if(i<109){
+    if(pressure < 0){
+      pressure=0; 
+    }//endif
+
+    
+    
+    digitalRead(8);
+    if(i<30){
+      currents[i] = currValue;
+    }//endif
+    
+    if(i<50){
       vals[i] = pressure;
     }//endif 
     i++;
@@ -71,6 +93,16 @@ void setup() {
   digitalWrite(3,HIGH); 
   while(digitalRead(7) != HIGH){
     digitalRead(7);  
+    delay(20); 
+    currValue = analogRead(A3);
+    //volts = (currValue/1023) *5; 
+    if(m<30){
+      currents[m] = currValue;
+    }//endif
+
+
+
+    m++; 
   }//endwhile
   digitalWrite(3,LOW);
 
@@ -78,11 +110,17 @@ void setup() {
   myFile = SD.open ("test.txt", FILE_WRITE);
   if (myFile){
 
-    for(int j=0; j<99; j++){
+    for(int j=0; j<49; j++){
       myFile.print("Pressure: "); 
       myFile.println(vals[j]);
     }//endfor
-    myFile.close(); 
+    
+
+     for(int k=0; k<29; k++){
+       myFile.print("Volts: ");
+       myFile.println(currents[k]);
+     }//endfor
+     myFile.close(); 
   }//endif
   else{
     lcd.clear();
@@ -94,7 +132,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  for (int j=0; j< 99; j++){
+  for (int j=0; j< 50; j++){
     lcd.print(j);
     lcd.print("pres ");
     lcd.println(vals[j]);
