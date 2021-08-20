@@ -40,4 +40,4 @@ volatile bool ten_sec_timer_on = false;
 volatile bool extending = false;
 volatile bool retracting = false; 
 volatile bool datalog_time = false; 
-String dataString = "It works!!"; 
+String dataString = ""; 

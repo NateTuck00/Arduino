@@ -13,7 +13,7 @@ void measureCurrent(){
   Serial.print(F("DS"));
   Serial.println(dataString);
   #endif
-  dataString += ",Current:";
+  dataString += ",";
   dataString.concat(concaterator);
   dataString += ",";
   #ifdef debug

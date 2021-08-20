@@ -39,10 +39,9 @@ void interrupt25() {
    if(extending == true){
     //measure pressure and overcurrent and add it to the dataString
     pressure = measurePressure();   
-    dataString += "Test:";
     dataString.concat(tests);
     measureCurrent();
-    dataString += "Pressure:";
+    //dataString += "Pressure:";
     String concaterator = String(pressure,1);
     dataString.concat(concaterator);
     extend();                                               
@@ -51,8 +50,7 @@ void interrupt25() {
 
    if(retracting == true){
     pressure =  measurePressure();  
-    dataString.concat(tests);
-    dataString += ",";                                                       
+    dataString.concat(tests);                                                      
     measureCurrent();
     String concaterator = String(pressure,1);
     dataString.concat(concaterator);
